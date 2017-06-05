@@ -1,0 +1,67 @@
+{
+	//List of categories.
+	"categories":{
+		"category_id1":{
+			"title":" "
+		},
+		"category_id2":{
+			"title":" "
+		}
+	},
+	// List of commodities names, organied by category ID.
+	"commodities":{
+		"category_id1":{
+			"commodity_id1" :{
+				"name": "",
+				"unit" : "",
+				"price" : "",
+				"state": "",
+				"amount":""
+			},
+			"commodity_id2" :{
+				"name": "",
+				"unit" : "",
+				"price" : "",
+				"state": "",
+				"amount":""
+			}
+		},
+		"category_id2":{
+			"commodity_id3" :{
+				"name": "",
+				"unit" : "",
+				"price" : "",
+				"state": "",
+				"amount":""
+			},
+			"commodity_id4" :{
+				"name": "",
+				"unit" : "",
+				"price" : "",
+				"state": "",
+				"amount":""
+			}
+		},
+	}, 
+	// List of orders
+	"orders":{
+		"order_id1":{
+			"date":"",
+			"commodities":{
+				"commodity_id1" :{
+					"name": "",
+					"unit" : "",
+					"sold_price" : "",
+					"sold_amount":"",
+
+				}
+			},
+			"total":"",
+			"discount":"",
+			"received":"",
+			"change":""
+			}
+		}
+	}
+}
+
