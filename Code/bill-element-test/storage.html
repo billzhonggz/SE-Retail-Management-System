@@ -6,11 +6,14 @@
   <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
 </head>
 <body>
+    <div id="nav">
+        <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+            <template slot="title">Storage Management</template>
+            <el-menu-item>
+        </el-menu>
+    </div>
   <div id="app">
-    <el-button @click="visible = true">按钮</el-button>
-    <el-dialog v-model="visible" title="Hello world">
-      <p>欢迎使用 Element</p>
-    </el-dialog>
+    
   </div>
 </body>
   <!-- 先引入 Vue -->
@@ -24,5 +27,19 @@
         return { visible: false }
       }
     })
+
+    export default {
+    data() {
+      return {
+        activeIndex: '1',
+        activeIndex2: '1'
+      };
+    },
+    methods: {
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      }
+    }
+  }
   </script>
 </html>
