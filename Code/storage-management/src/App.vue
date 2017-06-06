@@ -22,8 +22,55 @@
         </el-menu>
       </div>
       <!--Main content area-->
-      <div class="main-right"></div>
+      <div class="main-right">
+        <!--A sample card-->
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <!--Card name-->
+            <span style="line-height: 36px;">Apple</span>
+            <el-button style="float: right; margin: 5px;" type="danger">Delete</el-button>
+            <el-button style="float: right; margin: 5px;" type="primary">Edit</el-button>
+          </div>
+          <el-row>
+            <el-col :span="12">
+              <div class="text item">
+                <!--List of content-->
+                <p>Unit: 500g</p>
+                <p>Unit proce: 3.00</p>
+                <p>Amount: 100</p>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <img style="max-width: 100%; height: auto; float: right;" src="./examples/apple.jpg" class="image">
+            </el-col>
+          </el-row>
+        </el-card>
+        <!--Another sample card-->
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <!--Card name-->
+            <span style="line-height: 36px;">Pear</span>
+            <el-button style="float: right; margin: 5px;" type="danger">Delete</el-button>
+            <el-button style="float: right; margin: 5px;" type="primary">Edit</el-button>
+          </div>
+          <el-row>
+            <el-col :span="12">
+              <div class="text item">
+                <!--List of content-->
+                <p>Unit: 500g</p>
+                <p>Unit proce: 4.50</p>
+                <p>Amount: 10</p>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <img style="max-width: 100%; height: auto; float: right;" src="./examples/pear.jpg" class="image">
+            </el-col>
+          </el-row>
+        </el-card>
+      </div>
     </main>
+
+
   </div>
 </template>
 
@@ -35,10 +82,14 @@
   import ElCol from 'element-ui/packages/col/src/col'
   import ElMenu from '../node_modules/element-ui/packages/menu/src/menu'
   import ElMenuItem from '../node_modules/element-ui/packages/menu/src/menu-item'
+  import ElCard from '../node_modules/element-ui/packages/card/src/main'
+  import ElButton from '../node_modules/element-ui/packages/button/src/button'
   Vue.use(Element)
 
   export default {
     components: {
+      ElButton,
+      ElCard,
       ElMenuItem,
       ElMenu,
       ElCol,
