@@ -20,11 +20,9 @@
             <div class = "main-top">
             	<el-row>
 				  <el-col :span="4"><div class="grid-content bg-purple">Type</div></el-col>
-				  <el-col :span="4"><div class="grid-content bg-purple-light">Product Name</div></el-col>
-				  <el-col :span="4"><div class="grid-content bg-purple">Unit Price</div></el-col>
-				  <el-col :span="4"><div class="grid-content bg-purple-light">Amount</div></el-col>
-				  <el-col :span="4"><div class="grid-content bg-purple">Discount</div></el-col>
-				  <el-col :span="4"><div class="grid-content bg-purple-light">Subtotal</div></el-col>
+				  <el-col :span="16"><div class="grid-content bg-purple-light">Commodities Information</div></el-col>
+				  <el-col :span="4"><div class="grid-content bg-purple">List</div></el-col>
+				  
 				</el-row>
 
 
@@ -41,33 +39,63 @@
 
               <!-- 右侧主内容区 -->
               <div  class="main-right" >
-              		<el-card class="box-card">
-					  <div slot="header" class="clearfix">
-					    <span style="line-height: 36px;">Apple</span>
-					   
-						   <el-input-number size = "" v-model="num1" @change="handleChange" :min="1" :max="10"></el-input-number>
-						
-					  </div>
-					  <div v-for="o in 4" :key="o" class="text item">
-					    {{'Name '}}
-					  </div>
-					</el-card>
+              		<div class = "commodity">
+	              		<el-card class="box-card">
+						  <div slot="header" class="clearfix">
+						    <span style="line-height: 36px;">Apple</span>
+							 <el-input-number size = "" v-model="num1" @change="handleChange" :min="1" :max="10"></el-input-number>
+						  </div>
+						  <div  class="text item">
+						    {{'Product Name'}}
+						  </div>
+						  <div  class="text item">
+						    {{'Unit Price'}}
+						  </div>
+						  <div  class="text item">
+						    {{'Discount'}}
+						  </div>
+						  <div  class="text item">
+						    {{'Subtotal'}}
+						  </div>
+						</el-card>
+
+					</div>
+
 
               </div>
+
+              	<div class ="block">
+
+              		<span class = "wrapper">
+              		<el-row>
+					  <el-col :span="4"><el-button :plain="true" type="success">Received</el-button></el-col>
+					  <el-col :span="4"><el-button :plain="true" type="warning">Back</el-button></el-col>
+					  <el-col :span="4"><el-input size = "small"v-model="input" placeholder="Input Discount"></el-input></el-col>
+					  <el-col :span="4"><el-input size = "small"v-model="input" placeholder="Total Price"></el-input></el-col>
+				  
+					</el-row>
+              			
+              			
+              			
+              		</span>
+              	
+              	</div>
               </div>
               <!-- Main Bottom-->
-              <div class = "main-bottom">
-              	<div class ="block">
-              		<span class = "wrapper">
-              			<el-button :plain="true" type="success">Received</el-button>
-              			<el-button :plain="true" type="warning">Back</el-button>
-              		</span>
-              	</div>
-              </div> 
+
         </main>
       </div>
     </template>
-
+    <script>
+    	
+    	export default {
+  data() {
+    return {
+      input: ''
+    }
+  }
+}
+    </script>
     <script>
     import Vue from 'vue'
     import Element from 'element-ui'
@@ -116,8 +144,10 @@ new Ctor().$mount('#app')
       main{    display: -webkit-box;  display: -ms-flexbox;  display: flex;  min-height: 800px;  border: solid 40px #E9ECF1;  background-color: #FCFCFC;  }
       main .main-top{text-align: center;width: 100%;float: left;}
       main .main-left{text-align: center;width: 17%;float: left;}
-      main .main-right{-webkit-box-flex: 1;  -ms-flex: 1;  flex: 1;  background-color: #fff; padding: 50px 70px; }
+      main .main-right{-webkit-box-flex: 1;  -ms-flex: 1;  flex: 1;  background-color: #fff; padding: 50px 70px; width :75% }
+      main .main-list{text-align: center;width: 13%;float: right;}
       main .el-menu{background-color: transparent!important;}
+      main .block{text-align:left;}
 /* Main Top*/
  .el-row {
     margin-bottom: 20px;
