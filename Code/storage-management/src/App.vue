@@ -51,7 +51,7 @@
             <!--Card name-->
             <span style="line-height: 36px;">Pear</span>
             <el-button style="float: right; margin: 5px;" type="danger">Delete</el-button>
-            <el-button style="float: right; margin: 5px;" type="primary">Edit</el-button>
+            <el-button style="float: right; margin: 5px;" type="primary" @clich="dialogFormVisible">Edit</el-button>
           </div>
           <el-row>
             <el-col :span="12">
@@ -69,35 +69,34 @@
         </el-card>
       </div>
     </main>
-
-
+    <!--Pop-up window for Edit-->
+    <!--<el-dialog title="Edit Commodity" :visible.sync="dialogFormVisible = true">-->
+      <!--<el-form :model="form">-->
+        <!--<el-form-item label="Name" :lable-width="formLabelWidth">-->
+          <!--<el-input v-model="form.name" autoComplete="off"></el-input>-->
+        <!--</el-form-item>-->
+        <!--<el-select label="Category">-->
+          <!--<el-option-->
+            <!--v-for="item in categories"-->
+            <!--:key="item.value"-->
+            <!--:label="item.label"-->
+            <!--:value="item.label">-->
+          <!--</el-option>-->
+        <!--</el-select>-->
+      <!--</el-form>-->
+    <!--</el-dialog>-->
   </div>
 </template>
 
 <script>
-  import Vue from 'vue'
-  import Element from 'element-ui'
-  import 'element-ui/lib/theme-default/index.css'
-  import ElRow from 'element-ui/packages/row/src/row'
-  import ElCol from 'element-ui/packages/col/src/col'
-  import ElMenu from '../node_modules/element-ui/packages/menu/src/menu'
-  import ElMenuItem from '../node_modules/element-ui/packages/menu/src/menu-item'
-  import ElCard from '../node_modules/element-ui/packages/card/src/main'
-  import ElButton from '../node_modules/element-ui/packages/button/src/button'
-  Vue.use(Element)
-
-  export default {
-    components: {
-      ElButton,
-      ElCard,
-      ElMenuItem,
-      ElMenu,
-      ElCol,
-      ElRow
-    },
-    name: 'app'
-  }
-
+    export default {
+      name: 'app',
+      data: function () {
+        return {
+          active: true
+        }
+      }
+    }
 </script>
 
 <style>
