@@ -25,8 +25,8 @@
 				  
 				</el-row>
 
-
-             
+			<el-row>
+             <el-col :span="20">
             <!-- 左侧导航 -->
             <div class="main-left">
               <el-menu default-active="/activePublic" class="el-menu-vertical-demo" :router="true">
@@ -46,16 +46,16 @@
 							 <el-input-number size = "" v-model="num1" @change="handleChange" :min="1" :max="10"></el-input-number>
 						  </div>
 						  <div  class="text item">
-						    {{'Product Name'}}
+						    {{'Product Name:'}}
 						  </div>
 						  <div  class="text item">
-						    {{'Unit Price'}}
+						    {{'Unit Price:'}}
 						  </div>
 						  <div  class="text item">
-						    {{'Discount'}}
+						    {{'Discount:'}}
 						  </div>
 						  <div  class="text item">
-						    {{'Subtotal'}}
+						    {{'Subtotal:'}}
 						  </div>
 						</el-card>
 
@@ -63,7 +63,31 @@
 
 
               </div>
+              </el-col>
+              <el-col :span="4">
+              <div class = "main-list">
+              	<el-table :data="tableData" stripe style="width: 100%">
+				    <el-table-column
+				      prop="order"
+				      label="Order Number"
+				      width="18">
+				    </el-table-column>
+				    <el-table-column
+				      prop="name"
+				      label="Product Name"
+				      width="18">
+				    </el-table-column>
+				    <el-table-column
+				      prop="amount"
+				      label="Amount"
+				      width="18">
+				    </el-table-column>
 
+				 </el-table>
+
+              </div>
+              </el-col>
+              </el-row>
               	<div class ="block">
 
               		<span class = "wrapper">
@@ -86,6 +110,31 @@
         </main>
       </div>
     </template>
+    <script>
+  export default {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }]
+      }
+    }
+  }
+</script>
     <script>
     	
     	export default {
@@ -144,10 +193,11 @@ new Ctor().$mount('#app')
       main{    display: -webkit-box;  display: -ms-flexbox;  display: flex;  min-height: 800px;  border: solid 40px #E9ECF1;  background-color: #FCFCFC;  }
       main .main-top{text-align: center;width: 100%;float: left;}
       main .main-left{text-align: center;width: 17%;float: left;}
-      main .main-right{-webkit-box-flex: 1;  -ms-flex: 1;  flex: 1;  background-color: #fff; padding: 50px 70px; width :75% }
-      main .main-list{text-align: center;width: 13%;float: right;}
+      main .main-right{-webkit-box-flex: 1;  -ms-flex: 1;  flex: 1;  background-color: #fff; padding: 50px 85px; width :83% }
+      main .main-list{text-align: center;width: 100%;float: right;}
       main .el-menu{background-color: transparent!important;}
       main .block{text-align:left;}
+      main .commodity{padding: 85px;}
 /* Main Top*/
  .el-row {
     margin-bottom: 20px;
