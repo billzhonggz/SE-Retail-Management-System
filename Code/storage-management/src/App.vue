@@ -158,4 +158,8 @@
   main .el-menu {
     background-color: transparent !important;
   }
+
+  main .el-card {
+    margin-bottom: 30px;
+  }
 </style>
