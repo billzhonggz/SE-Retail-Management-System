@@ -1,5 +1,7 @@
 # storage-management
 
+[![Build Status](https://travis-ci.org/billzhonggz/SE-Retail-Management-System.svg?branch=bill-element-test)](https://travis-ci.org/billzhonggz/SE-Retail-Management-System)
+
 > Storage management for SE-Retail-Management project
 
 ## Build Setup
