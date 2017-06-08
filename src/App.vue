@@ -131,12 +131,20 @@
             <el-button type="danger">Clear</el-button>
           </el-card>
         </el-row>
+        <el-row>
+          <el-card class="box-card">
+            <ul>
+              <li v-for="cg in categories"></li>
+            </ul>
+          </el-card>
+        </el-row>
       </el-col>
 
       <!--</el-row>-->
     </main>
   </div>
 </template>
+
 
 <script>
   import ElRow from 'element-ui/packages/row/src/row'
@@ -145,6 +153,9 @@
   import ElInputNumber from '../node_modules/element-ui/packages/input-number/src/input-number'
   import ElButton from '../node_modules/element-ui/packages/button/src/button'
   import ElCard from '../node_modules/element-ui/packages/card/src/main'
+  import Vue from 'vue'
+  import firebase from 'firebase'
+
   export default {
     data () {
       return {
@@ -175,6 +186,20 @@
     },
     name: 'app'
   }
+
+  var db = firebase.initializeApp({
+    databaseURL: 'https://se-retail.firebaseio.com'
+  }).database().ref('se-retail')
+  console.log('DB' + db)
+  console.log(db.child('categories'))
+
+  var vm = new Vue({
+    el: '#app',
+    firebase: {
+      categories: db.child('categories')
+    }
+  })
+  console.log(vm)
 </script>
 
 <style>
@@ -219,7 +244,7 @@
     text-align: center;
   }
 
-  main.el-col{
+  main.el-col {
     margin: 10px;
   }
 </style>
