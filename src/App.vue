@@ -21,11 +21,11 @@
         <!--TODO: List of commodities-->
         <el-row>
           <el-tabs type="border-card">
-            <el-tab-pane label="FRUITS">
+            <el-tab-pane v-for="item in categories" :label = "item.title">
               <el-card class="box-card">
                 <div slot="header" class="clearfix">
                   <!--Card name-->
-                  <strong style="line-height: 36px;">Apple</strong>
+                  <strong style="line-height: 36px;" v-for = "item in commodities">{{item.name}}</strong>
                   <el-input-number v-model="num1" v-bind:min="0" v-on:change="handleChange"></el-input-number>
                 </div>
                 <el-row>
@@ -131,12 +131,24 @@
             <el-button type="danger">Clear</el-button>
           </el-card>
         </el-row>
+        <el-row>
+          <el-card class="box-card">
+
+            <ul>
+              <li v-for="item in categories">
+                {{item.title}}
+              </li>
+            </ul>
+
+          </el-card>
+        </el-row>
       </el-col>
 
       <!--</el-row>-->
     </main>
   </div>
 </template>
+
 
 <script>
   import ElRow from 'element-ui/packages/row/src/row'
@@ -145,7 +157,28 @@
   import ElInputNumber from '../node_modules/element-ui/packages/input-number/src/input-number'
   import ElButton from '../node_modules/element-ui/packages/button/src/button'
   import ElCard from '../node_modules/element-ui/packages/card/src/main'
+  import firebase from 'firebase'
+
+  let config = {
+    apiKey: 'AIzaSyDxF-ZmWZP0qtgeQQli2oPCTn6hw4aovbo',
+    authDomain: 'se-retail.firebaseapp.com',
+    databaseURL: 'https://se-retail.firebaseio.com',
+    projectId: 'se-retail',
+    storageBucket: 'se-retail.appspot.com',
+    messagingSenderId: '193615524398'
+  }
+
+  let app = firebase.initializeApp(config)
+  let db = app.database()
+  let dbRef = db.ref('categories')
+  let dbCom = db.ref('commodities')
+  let dbOrd = db.ref('orders')
   export default {
+    firebase: {
+      categories: dbRef,
+      commodities: dbCom,
+      orders: dbOrd
+    },
     data () {
       return {
         num1: 1,
@@ -175,6 +208,7 @@
     },
     name: 'app'
   }
+
 </script>
 
 <style>
@@ -219,7 +253,7 @@
     text-align: center;
   }
 
-  main.el-col{
+  main.el-col {
     margin: 10px;
   }
 </style>
