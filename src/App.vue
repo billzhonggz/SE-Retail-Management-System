@@ -21,62 +21,20 @@
         <!--TODO: List of commodities-->
         <el-row>
           <el-tabs type="border-card">
-            <el-tab-pane v-for="item in categories" :label = "item.title">
+            <el-tab-pane id="categories-list" v-for="item in categories" v-bind:key="item.id" v-on="findCommoditiesByCategory(item)" v-bind:label="item.title">
               <el-card class="box-card">
                 <div slot="header" class="clearfix">
                   <!--Card name-->
-                  <strong style="line-height: 36px;" v-for = "item in commodities">{{item.name}}</strong>
+                  <strong style="line-height: 36px;" v-for = "item in commodities" v-bind:key=item.id> {{item.name}} </strong>
                   <el-input-number v-model="num1" v-bind:min="0" v-on:change="handleChange"></el-input-number>
                 </div>
                 <el-row>
                   <el-col :span="12">
                     <div class="text item">
                       <!--List of content-->
-                      <p>Unit: 500g</p>
-                      <p>Unit price: 3.00</p>
-                      <p>Amount: 100</p>
-                    </div>
-                  </el-col>
-                  <el-col :span="12">
-                    <img style="max-width: 100%; height: auto; float: right;" src="./pic/apple.jpg" class="image">
-                  </el-col>
-                </el-row>
-              </el-card>
-
-              <el-card class="box-card">
-                <div slot="header" class="clearfix">
-                  <!--Card name-->
-                  <strong style="line-height: 36px;">Apple</strong>
-                  <el-input-number v-model="num1" v-bind:min="0" v-on:change="handleChange"></el-input-number>
-                </div>
-                <el-row>
-                  <el-col :span="12">
-                    <div class="text item">
-                      <!--List of content-->
-                      <p>Unit: 500g</p>
-                      <p>Unit price: 3.00</p>
-                      <p>Amount: 100</p>
-                    </div>
-                  </el-col>
-                  <el-col :span="12">
-                    <img style="max-width: 100%; height: auto; float: right;" src="./pic/apple.jpg" class="image">
-                  </el-col>
-                </el-row>
-              </el-card>
-
-              <el-card class="box-card">
-                <div slot="header" class="clearfix">
-                  <!--Card name-->
-                  <strong style="line-height: 36px;">Apple</strong>
-                  <el-input-number v-model="num1" v-bind:min="0" v-on:change="handleChange"></el-input-number>
-                </div>
-                <el-row>
-                  <el-col :span="12">
-                    <div class="text item">
-                      <!--List of content-->
-                      <p>Unit: 500g</p>
-                      <p>Unit price: 3.00</p>
-                      <p>Amount: 100</p>
+                      <p>Unit: {{item.unit}}</p>
+                      <p>Unit price: {{item.price}}</p>
+                      <p>Amount: {{item.amount}}</p>
                     </div>
                   </el-col>
                   <el-col :span="12">
@@ -196,6 +154,15 @@
     methods: {
       handChange (value) {
         console.log(value)
+      },
+      // Find commondites by category ID.
+      // INPUT category ID.
+      // OUTPUT commodities list object.
+      findCommoditiesByCategory (category) {
+        let categoryId = category.id
+        console.log('In find commodities function. Current category: ' + categoryId)
+        let commoditiesInCategory = dbCom.child(categoryId)
+        return commoditiesInCategory
       }
     },
     components: {
