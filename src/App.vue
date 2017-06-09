@@ -22,19 +22,19 @@
         <el-row>
           <el-tabs type="border-card">
             <el-tab-pane id="categories-list" v-for="item in categories" v-bind:key="item.id" v-on="findCommoditiesByCategory(item)" v-bind:label="item.title">
-              <el-card class="box-card">
+              <el-card class="box-card" v-for="commodity in commodities" v-bind:key="commodity.key">
                 <div slot="header" class="clearfix">
                   <!--Card name-->
-                  <strong style="line-height: 36px;" v-for = "item in commodities" v-bind:key=item.id> {{item.name}} </strong>
+                  <strong style="line-height: 36px;"> {{commodity.name}} </strong>
                   <el-input-number v-model="num1" v-bind:min="0" v-on:change="handleChange"></el-input-number>
                 </div>
                 <el-row>
                   <el-col :span="12">
                     <div class="text item">
                       <!--List of content-->
-                      <p>Unit: {{item.unit}}</p>
-                      <p>Unit price: {{item.price}}</p>
-                      <p>Amount: {{item.amount}}</p>
+                      <p>Unit: {{commodity.unit}}</p>
+                      <p>Unit price: {{commodity.price}}</p>
+                      <p>Amount: {{commodity.amount}}</p>
                     </div>
                   </el-col>
                   <el-col :span="12">
@@ -129,7 +129,7 @@
   let app = firebase.initializeApp(config)
   let db = app.database()
   let dbRef = db.ref('categories')
-  let dbCom = db.ref('commodities')
+  let dbCom = db.ref('commodities').child('cg1')
   let dbOrd = db.ref('orders')
   export default {
     firebase: {
@@ -156,12 +156,11 @@
         console.log(value)
       },
       // Find commondites by category ID.
-      // INPUT category ID.
-      // OUTPUT commodities list object.
       findCommoditiesByCategory (category) {
-        let categoryId = category.id
+        let categoryId = category.key
         console.log('In find commodities function. Current category: ' + categoryId)
-        let commoditiesInCategory = dbCom.child(categoryId)
+        let commoditiesInCategory = dbCom.child('cg1').orderByKey()
+        console.log('Query commodies: ' + commoditiesInCategory)
         return commoditiesInCategory
       }
     },
