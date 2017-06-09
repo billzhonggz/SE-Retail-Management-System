@@ -20,8 +20,8 @@
       <el-col v-bind:span="12">
         <!--TODO: List of commodities-->
         <el-row>
-          <el-tabs type="border-card">
-            <el-tab-pane id="categories-list" v-for="item in categories" v-bind:key="item.id" v-on="findCommoditiesByCategory(item)" v-bind:label="item.title">
+          <el-tabs type="border-card" @tab-click="refreshComm">
+            <el-tab-pane v-for="item in categories" v-bind:key="item.id" v-bind:label="item.title">
               <el-card class="box-card" v-for="commodity in commodities" v-bind:key="commodity.key">
                 <div slot="header" class="clearfix">
                   <!--Card name-->
@@ -116,6 +116,7 @@
   import ElButton from '../node_modules/element-ui/packages/button/src/button'
   import ElCard from '../node_modules/element-ui/packages/card/src/main'
   import firebase from 'firebase'
+  // import Vue from 'vue'
 
   let config = {
     apiKey: 'AIzaSyDxF-ZmWZP0qtgeQQli2oPCTn6hw4aovbo',
@@ -128,17 +129,18 @@
 
   let app = firebase.initializeApp(config)
   let db = app.database()
-  let dbRef = db.ref('categories')
-  let dbCom = db.ref('commodities').child('cg1')
+  let dbCate = db.ref('categories')
+  let dbCom = db.ref('commodities')
   let dbOrd = db.ref('orders')
   export default {
     firebase: {
-      categories: dbRef,
+      categories: dbCate,
       commodities: dbCom,
       orders: dbOrd
     },
     data () {
       return {
+        commodities: '',
         num1: 1,
         exampleCommodityList: [{
           name: 'Apple',
@@ -152,16 +154,24 @@
       }
     },
     methods: {
-      handChange (value) {
+      handleChange (value) {
         console.log(value)
       },
-      // Find commondites by category ID.
-      findCommoditiesByCategory (category) {
-        let categoryId = category.key
-        console.log('In find commodities function. Current category: ' + categoryId)
-        let commoditiesInCategory = dbCom.child('cg1').orderByKey()
-        console.log('Query commodies: ' + commoditiesInCategory)
-        return commoditiesInCategory
+      refreshComm (tab, event) {
+        console.log(tab.label, event)
+        let cateTitle = tab.label
+        // Firebase query.
+        dbCate.orderByChild('title').equalTo(cateTitle).once('child_added', snap => {
+          console.log(snap.val())
+          console.log('commodities/' + snap.key)
+          let comRef = dbCom.child(snap.key)
+          comRef.once('value').then(comSnap => {
+            console.log(comSnap.val())
+            let commodities = comSnap.val()
+            console.log(commodities)
+            return commodities
+          })
+        })
       }
     },
     components: {
@@ -174,7 +184,6 @@
     },
     name: 'app'
   }
-
 </script>
 
 <style>
