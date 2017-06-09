@@ -22,7 +22,7 @@
         <el-row>
           <el-tabs type="border-card" @tab-click="refreshComm">
             <el-tab-pane v-for="item in categories" v-bind:key="item.id" v-bind:label="item.title">
-              <el-card class="box-card" v-for="commodity in commodities" v-bind:key="commodity.key">
+              <el-card class="box-card" v-for="commodity in cateCommodities" v-bind:key="commodity.key">
                 <div slot="header" class="clearfix">
                   <!--Card name-->
                   <strong style="line-height: 36px;"> {{commodity.name}} </strong>
@@ -133,14 +133,8 @@
   let dbCom = db.ref('commodities')
   let dbOrd = db.ref('orders')
   export default {
-    firebase: {
-      categories: dbCate,
-      commodities: dbCom,
-      orders: dbOrd
-    },
     data () {
       return {
-        commodities: '',
         num1: 1,
         exampleCommodityList: [{
           name: 'Apple',
@@ -160,6 +154,7 @@
       refreshComm (tab, event) {
         console.log(tab.label, event)
         let cateTitle = tab.label
+        let cateCommodities
         // Firebase query.
         dbCate.orderByChild('title').equalTo(cateTitle).once('child_added', snap => {
           console.log(snap.val())
@@ -167,12 +162,16 @@
           let comRef = dbCom.child(snap.key)
           comRef.once('value').then(comSnap => {
             console.log(comSnap.val())
-            let commodities = comSnap.val()
-            console.log(commodities)
-            return commodities
+            cateCommodities = comSnap.val()
+            console.log(cateCommodities)
           })
         })
       }
+    },
+    firebase: {
+      categories: dbCate,
+      commodities: dbCom,
+      orders: dbOrd
     },
     components: {
       ElCard,
