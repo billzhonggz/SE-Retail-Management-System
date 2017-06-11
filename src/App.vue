@@ -22,7 +22,7 @@
         <el-row>
           <el-tabs type="border-card" @tab-click="refreshComm">
             <el-tab-pane v-for="item in categories" v-bind:key="item.id" v-bind:label="item.title">
-              <el-card class="box-card" v-for="commodity in cateCommodities" v-bind:key="commodity.key">
+              <el-card class="box-card" v-for="commodity in commodities" v-bind:key="commodity.key">
                 <div slot="header" class="clearfix">
                   <!--Card name-->
                   <strong style="line-height: 36px;"> {{commodity.name}} </strong>
@@ -130,7 +130,7 @@
   let app = firebase.initializeApp(config)
   let db = app.database()
   let dbCate = db.ref('categories')
-  let dbCom = db.ref('commodities')
+  let dbCom = db.ref('commodities').child('cg1')
   let dbOrd = db.ref('orders')
   export default {
     data () {
