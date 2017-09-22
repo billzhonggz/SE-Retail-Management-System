@@ -194,7 +194,11 @@
       }
     },
     methods: {
-      handChange (value) {
+      // TODO: Function "handleChange"
+      // 1. Divided handle changes functions with flags / speared functions for each card.
+      // 2. Functions should handle an array to record selected commodities and their amount.
+      // 3. Refresh Views.
+      handleChange (value) {
         console.log(value)
       }
     },
