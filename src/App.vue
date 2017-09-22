@@ -21,11 +21,11 @@
         <!--TODO: List of commodities-->
         <el-row>
           <el-tabs type="border-card">
-            <el-tab-pane v-for="item in categories" :label = "item.title">
+            <el-tab-pane v-for="item in categories" :key="item.id" :label = "item.title">
               <el-card class="box-card">
                 <div slot="header" class="clearfix">
                   <!--Card name-->
-                  <strong style="line-height: 36px;" v-for = "item in commodities">{{item.name}}</strong>
+                  <strong style="line-height: 36px;" v-for = "item in commodities" :key="item.id">{{item.name}}</strong>
                   <el-input-number v-model="num1" v-bind:min="0" v-on:change="handleChange"></el-input-number>
                 </div>
                 <el-row>
