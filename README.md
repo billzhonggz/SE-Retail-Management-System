@@ -1,5 +1,7 @@
 # sellpage
 
+[![Build Status](https://travis-ci.org/billzhonggz/SE-Retail-Management-System.svg?branch=master)](https://travis-ci.org/billzhonggz/SE-Retail-Management-System)
+
 > A Vue.js project
 
 ## Build Setup

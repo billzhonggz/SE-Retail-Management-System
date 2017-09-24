@@ -27,8 +27,8 @@
                   <!--Card name-->
                   <strong style="line-height: 36px;">{{item.name}}</strong>
                   <!--Cannot use props from child component ElInput.-->
-                  <amount-input :label="item.name" v-model="exampleCommodityList.amount" v-bind:min="0"
-                                v-on:change="handleChange"></amount-input>
+                  <amount-input :comm-name="item.name" :comm-unit="item.price" v-bind:min="0" v-bind:max="item.amount"
+                                v-model="num1" v-on:change="handleChange(num1, item.name, item.price)"></amount-input>
                 </div>
                 <el-row>
                   <el-col :span="12">
@@ -55,7 +55,7 @@
           <el-tabs type="border-card">
             <el-tab-pane label="CURRENT ORDER">
               <!--Selected commodities list-->
-              <el-table v-bind:data="exampleCommodityList" height="250" style="width: 100%;">
+              <el-table v-bind:data="commodityList" height="250" style="width: 100%;">
                 <el-table-column
                   prop="name"
                   label="Commodity Name">
@@ -63,6 +63,10 @@
                 <el-table-column
                   prop="amount"
                   label="Amount">
+                </el-table-column>
+                <el-table-column
+                  prop="unit"
+                  label="Unit Price">
                 </el-table-column>
                 <el-table-column
                   prop="subtotal"
@@ -137,6 +141,9 @@
   let dbRef = db.ref('categories')
   let dbCom = db.ref('commodities/cg1')
   let dbOrd = db.ref('orders')
+
+  // var commodityList = []
+
   export default {
     firebase: {
       categories: dbRef,
@@ -147,35 +154,29 @@
     data () {
       return {
         num1: 0,
-        exampleCommodityList: [{
-          name: 'Apple',
-          amount: '10',
-          subtotal: '30.00'
-        }, {
-          name: 'Pear',
-          amount: '5',
-          subtotal: '20.00'
-        }]
+        commodityList: [],
+        selectedCommodity: {
+          name: 'Commodity Name',
+          amount: '0',
+          unit: '0',
+          subtotal: '0'
+        }
       }
     },
-//    computed: {
-//      name: function () {
-//        return name
-//      },
-//      amount: function () {
-//        return num1
-//      },
-//      subtotal: function () {
-//        num1 * price
-//      }
-//    },
     methods: {
       // TODO: Function "handleChange"
       // 1. Divided handle changes functions with flags / speared functions for each card.
       // 2. Functions should handle an array to record selected commodities and their amount.
       // 3. Refresh Views.
-      handleChange: function (value) {
-        console.log(value)
+      handleChange: function (value, commName, commUnit) {
+        console.log('In handleChange, current value is ' + value)
+        // Adding object to list array.
+        this.commodityList.push({
+          name: commName,
+          amount: value,
+          unit: commUnit,
+          subtotal: value * commUnit
+        })
       }
     },
     components: {
@@ -186,7 +187,16 @@
       ElRow,
       'amount-input': {
         extends: ElInputNumber,
-        props: ['label']
+        props: {
+          commName: {
+            type: String,
+            default: 'Commodity Name'
+          },
+          commUnit: {
+            type: Number,
+            default: '0'
+          }
+        }
       }
     }
   }
