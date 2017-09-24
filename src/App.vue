@@ -5,7 +5,7 @@
       <!--Top header nav bar-->
       <el-row>
         <el-col>
-          <el-menu defaultActive="3" class="el-menu-demo" mode="horizontal" @select="">
+          <el-menu defaultActive="3" class="el-menu-demo" mode="horizontal">
             <el-menu-item index="1">SE Retail Management System</el-menu-item>
             <el-menu-item index="2">Storage</el-menu-item>
             <el-menu-item index="3">Sell</el-menu-item>
@@ -21,62 +21,23 @@
         <!--TODO: List of commodities-->
         <el-row>
           <el-tabs type="border-card">
-            <el-tab-pane v-for="item in categories" :key="item.id" :label = "item.title">
-              <el-card class="box-card">
+            <el-tab-pane v-for="item in categories" :key="item.id" :label="item.title" >
+              <el-card class="box-card" v-for="item in commodities" :key="item.id">
                 <div slot="header" class="clearfix">
                   <!--Card name-->
-                  <strong style="line-height: 36px;" v-for = "item in commodities" :key="item.id">{{item.name}}</strong>
-                  <el-input-number v-model="num1" v-bind:min="0" v-on:change="handleChange"></el-input-number>
+                  <strong style="line-height: 36px;">{{item.name}}</strong>
+                  <!--Cannot use props from child component ElInput.-->
+                  <amount-input :label="item.name" v-model="exampleCommodityList.amount" v-bind:min="0"
+                                v-on:change="handleChange"></amount-input>
                 </div>
                 <el-row>
                   <el-col :span="12">
                     <div class="text item">
                       <!--List of content-->
-                      <p>Unit: 500g</p>
-                      <p>Unit price: 3.00</p>
-                      <p>Amount: 100</p>
-                    </div>
-                  </el-col>
-                  <el-col :span="12">
-                    <img style="max-width: 100%; height: auto; float: right;" src="./pic/apple.jpg" class="image">
-                  </el-col>
-                </el-row>
-              </el-card>
-
-              <el-card class="box-card">
-                <div slot="header" class="clearfix">
-                  <!--Card name-->
-                  <strong style="line-height: 36px;">Apple</strong>
-                  <el-input-number v-model="num1" v-bind:min="0" v-on:change="handleChange"></el-input-number>
-                </div>
-                <el-row>
-                  <el-col :span="12">
-                    <div class="text item">
-                      <!--List of content-->
-                      <p>Unit: 500g</p>
-                      <p>Unit price: 3.00</p>
-                      <p>Amount: 100</p>
-                    </div>
-                  </el-col>
-                  <el-col :span="12">
-                    <img style="max-width: 100%; height: auto; float: right;" src="./pic/apple.jpg" class="image">
-                  </el-col>
-                </el-row>
-              </el-card>
-
-              <el-card class="box-card">
-                <div slot="header" class="clearfix">
-                  <!--Card name-->
-                  <strong style="line-height: 36px;">Apple</strong>
-                  <el-input-number v-model="num1" v-bind:min="0" v-on:change="handleChange"></el-input-number>
-                </div>
-                <el-row>
-                  <el-col :span="12">
-                    <div class="text item">
-                      <!--List of content-->
-                      <p>Unit: 500g</p>
-                      <p>Unit price: 3.00</p>
-                      <p>Amount: 100</p>
+                      <p>Unit: {{item.unit}}</p>
+                      <p>Unit price: {{item.price}}</p>
+                      <p>Amount: {{item.amount}}</p>
+                      <p>Status: {{item.state}}</p>
                     </div>
                   </el-col>
                   <el-col :span="12">
@@ -133,13 +94,7 @@
         </el-row>
         <el-row>
           <el-card class="box-card">
-
-            <ul>
-              <li v-for="item in categories">
-                {{item.title}}
-              </li>
-            </ul>
-
+            <p>Database raw data</p>
           </el-card>
         </el-row>
       </el-col>
@@ -154,24 +109,33 @@
   import ElRow from 'element-ui/packages/row/src/row'
   import ElCol from 'element-ui/packages/col/src/col'
   import ElTabPane from '../node_modules/element-ui/packages/tabs/src/tab-pane'
-  import ElInputNumber from '../node_modules/element-ui/packages/input-number/src/input-number'
+  import ElInputNumber from '../node_modules/element-ui/packages/input-number'
   import ElButton from '../node_modules/element-ui/packages/button/src/button'
   import ElCard from '../node_modules/element-ui/packages/card/src/main'
   import firebase from 'firebase'
 
+  //  let config = {
+  //    apiKey: 'AIzaSyDxF-ZmWZP0qtgeQQli2oPCTn6hw4aovbo',
+  //    authDomain: 'se-retail.firebaseapp.com',
+  //    databaseURL: 'https://se-retail.firebaseio.com',
+  //    projectId: 'se-retail',
+  //    storageBucket: 'se-retail.appspot.com',
+  //    messagingSenderId: '193615524398'
+  //  }
+
   let config = {
-    apiKey: 'AIzaSyDxF-ZmWZP0qtgeQQli2oPCTn6hw4aovbo',
-    authDomain: 'se-retail.firebaseapp.com',
-    databaseURL: 'https://se-retail.firebaseio.com',
-    projectId: 'se-retail',
-    storageBucket: 'se-retail.appspot.com',
-    messagingSenderId: '193615524398'
+    apiKey: 'AIzaSyBhr-1yhcgKdqiyYwPRWJ2DatlzxzonHhs',
+    authDomain: 'se-retail-management.firebaseapp.com',
+    databaseURL: 'https://se-retail-management.firebaseio.com',
+    projectId: 'se-retail-management',
+    storageBucket: 'se-retail-management.appspot.com',
+    messagingSenderId: '729149844491'
   }
 
   let app = firebase.initializeApp(config)
   let db = app.database()
   let dbRef = db.ref('categories')
-  let dbCom = db.ref('commodities')
+  let dbCom = db.ref('commodities/cg1')
   let dbOrd = db.ref('orders')
   export default {
     firebase: {
@@ -179,9 +143,10 @@
       commodities: dbCom,
       orders: dbOrd
     },
+    // TODO: Binding amount input with this array, compute remaining values automatically.
     data () {
       return {
-        num1: 1,
+        num1: 0,
         exampleCommodityList: [{
           name: 'Apple',
           amount: '10',
@@ -193,26 +158,38 @@
         }]
       }
     },
+//    computed: {
+//      name: function () {
+//        return name
+//      },
+//      amount: function () {
+//        return num1
+//      },
+//      subtotal: function () {
+//        num1 * price
+//      }
+//    },
     methods: {
       // TODO: Function "handleChange"
       // 1. Divided handle changes functions with flags / speared functions for each card.
       // 2. Functions should handle an array to record selected commodities and their amount.
       // 3. Refresh Views.
-      handleChange (value) {
+      handleChange: function (value) {
         console.log(value)
       }
     },
     components: {
       ElCard,
       ElButton,
-      ElInputNumber,
       ElTabPane,
       ElCol,
-      ElRow
-    },
-    name: 'app'
+      ElRow,
+      'amount-input': {
+        extends: ElInputNumber,
+        props: ['label']
+      }
+    }
   }
-
 </script>
 
 <style>
