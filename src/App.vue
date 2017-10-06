@@ -28,7 +28,7 @@
                   <strong style="line-height: 36px;">{{item.name}}</strong>
                   <!--Cannot use props from child component ElInput.-->
                   <amount-input :comm-name="item.name" :comm-unit="item.price" v-bind:min="0" v-bind:max="item.amount"
-                                v-model="num1" v-on:change="handleChange(num1, item.name, item.price)"></amount-input>
+                                v-model="item.num1" v-on:change="handleChange(item.num1, item.name, item.price)"></amount-input>
                 </div>
                 <el-row>
                   <el-col :span="12">
