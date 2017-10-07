@@ -18,10 +18,9 @@
       <!--left navigate-->
       <!--<el-row>-->
       <el-col v-bind:span="12">
-        <!--TODO: List of commodities-->
         <el-row>
           <el-tabs type="border-card">
-            <el-tab-pane v-for="item in categories" :key="item.id" :label="item.title" >
+            <el-tab-pane v-for="item in categories" :key="item.id" :label="item.title">
               <el-card class="box-card" v-for="item in commodities" :key="item.id">
                 <div slot="header" class="clearfix">
                   <!--Card name-->
@@ -71,7 +70,7 @@
               <el-table v-bind:data="commodityList" height="250" style="width: 100%;">
                 <el-table-column
                   prop="name"
-                  label="Commodity Name">
+                  label="Commodity">
                 </el-table-column>
                 <el-table-column
                   prop="amount"
@@ -105,17 +104,71 @@
             </el-col>
           </el-card>
           <el-card class="box-card">
-            <el-button type="success">Check out</el-button>
-            <el-button type="danger">Clear</el-button>
-          </el-card>
-        </el-row>
-        <el-row>
-          <el-card class="box-card">
-            <p>Database raw data</p>
+            <el-button type="success" @click="checkoutDialogVisible = true">Check out</el-button>
+            <!--Pop-up dialog for complete order display.-->
+            <el-dialog
+              title="Order Summary"
+              :visible.sync="checkoutDialogVisible"
+              size="tiny"
+              :before-close="handleClose">
+              <!--Add order summary here-->
+              <el-row>
+                <el-table v-bind:data="commodityList" height="250" style="width: 100%;">
+                  <el-table-column
+                    prop="name"
+                    label="Commodity">
+                  </el-table-column>
+                  <el-table-column
+                    prop="amount"
+                    label="Amount">
+                  </el-table-column>
+                  <el-table-column
+                    prop="unit"
+                    label="Unit Price">
+                  </el-table-column>
+                  <el-table-column
+                    prop="subtotal"
+                    label="Subtotal">
+                  </el-table-column>
+                </el-table>
+              </el-row>
+              <el-row>
+                <el-col v-bind:span="4">
+                  <p>Discount </p>
+                </el-col>
+                <el-col v-bind:span="8">
+                  <el-input placehoder="100%" v-model="totalDiscount"></el-input>
+                </el-col>
+                <el-col v-bind:span="4">
+                  <p>Total</p>
+                </el-col>
+                <el-col v-bind:span="8">
+                  <el-input v-model="totalPrice"></el-input>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col v-bind:span="4">
+                  <p>Receive </p>
+                </el-col>
+                <el-col v-bind:span="8">
+                  <el-input placehoder="100%" v-model="received"></el-input>
+                </el-col>
+                <el-col v-bind:span="4">
+                  <p>Change</p>
+                </el-col>
+                <el-col v-bind:span="8">
+                  <el-input v-model="changes"></el-input>
+                </el-col>
+              </el-row>
+              <span slot="footer" class="dialog-footer">
+                <el-button type="success" @click="checkoutDialogVisible = false">Confirm</el-button>
+                <el-button type="danger" @click="checkoutDialogVisible = false">Cancel</el-button>
+              </span>
+            </el-dialog>
+            <el-button type="danger" v-on:click="clearAll()">Clear</el-button>
           </el-card>
         </el-row>
       </el-col>
-
       <!--</el-row>-->
     </main>
   </div>
@@ -126,7 +179,7 @@
   import ElRow from 'element-ui/packages/row/src/row'
   import ElCol from 'element-ui/packages/col/src/col'
   import ElTabPane from '../node_modules/element-ui/packages/tabs/src/tab-pane'
-//  import ElInputNumber from '../node_modules/element-ui/packages/input-number'
+  //  import ElInputNumber from '../node_modules/element-ui/packages/input-number'
   import ElInput from '../node_modules/element-ui/packages/input'
   import ElButton from '../node_modules/element-ui/packages/button/src/button'
   import ElCard from '../node_modules/element-ui/packages/card/src/main'
@@ -169,7 +222,7 @@
         commodityList: [],
         totalDiscount: 100,
         received: 0,
-        change: 0
+        checkoutDialogVisible: false
       }
     },
     computed: {
@@ -180,6 +233,9 @@
         }
         total = total * this.totalDiscount / 100
         return total
+      },
+      changes: function () {
+        return this.received - this.totalPrice
       }
     },
     methods: {
@@ -225,6 +281,15 @@
             flag = 0
           }
         }
+      },
+      // TODO: Function is not working on the view side.
+      clearAll: function () {
+        // Clear commodityList
+        debugger
+        this.commodityList.length = 0
+      },
+      handleClose: function () {
+        this.checkoutDialogVisible = false
       }
     },
     components: {
