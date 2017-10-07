@@ -25,10 +25,23 @@
               <el-card class="box-card" v-for="item in commodities" :key="item.id">
                 <div slot="header" class="clearfix">
                   <!--Card name-->
-                  <strong style="line-height: 36px;">{{item.name}}</strong>
-                  <!--Cannot use props from child component ElInput.-->
-                  <amount-input :comm-name="item.name" :comm-unit="item.price" v-bind:min="0" v-bind:max="item.amount"
-                                v-model="item.num" v-on:change="handleChange(item.num, item.name, item.price)"></amount-input>
+                  <el-row>
+                    <el-col v-bind:span="4">
+                      <strong style="line-height: 36px;">Name</strong>
+                    </el-col>
+                    <el-col v-bind:span="20">
+                      <strong style="line-height: 36px;">{{item.name}}</strong>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col v-bind:span="4">
+                      <strong style="line-height: 36px;">Amount</strong>
+                    </el-col>
+                    <el-col v-bind:span="20">
+                      <el-input :comm-name="item.name" :comm-unit="item.price" v-bind:min="0" v-bind:max="item.amount"
+                                v-model="item.num" v-on:change="handleChange(item)"></el-input>
+                    </el-col>
+                  </el-row>
                 </div>
                 <el-row>
                   <el-col :span="12">
@@ -36,7 +49,7 @@
                       <!--List of content-->
                       <p>Unit: {{item.unit}}</p>
                       <p>Unit price: {{item.price}}</p>
-                      <p>Amount: {{item.amount}}</p>
+                      <p>Amount available: {{item.amount}}</p>
                       <p>Status: {{item.state}}</p>
                     </div>
                   </el-col>
@@ -82,13 +95,13 @@
               <p>Discount </p>
             </el-col>
             <el-col v-bind:span="8">
-              <el-input placehoder="100%"></el-input>
+              <el-input placehoder="100%" v-model="totalDiscount"></el-input>
             </el-col>
             <el-col v-bind:span="4">
               <p>Total</p>
             </el-col>
             <el-col v-bind:span="8">
-              <el-input></el-input>
+              <el-input v-model="totalPrice"></el-input>
             </el-col>
           </el-card>
           <el-card class="box-card">
@@ -113,7 +126,8 @@
   import ElRow from 'element-ui/packages/row/src/row'
   import ElCol from 'element-ui/packages/col/src/col'
   import ElTabPane from '../node_modules/element-ui/packages/tabs/src/tab-pane'
-  import ElInputNumber from '../node_modules/element-ui/packages/input-number'
+//  import ElInputNumber from '../node_modules/element-ui/packages/input-number'
+  import ElInput from '../node_modules/element-ui/packages/input'
   import ElButton from '../node_modules/element-ui/packages/button/src/button'
   import ElCard from '../node_modules/element-ui/packages/card/src/main'
   import firebase from 'firebase'
@@ -150,26 +164,31 @@
       commodities: dbCom,
       orders: dbOrd
     },
-    // TODO: Binding amount input with this array, compute remaining values automatically.
     data () {
       return {
         commodityList: [],
-        selectedCommodity: {
-          name: 'Commodity Name',
-          amount: '0',
-          unit: '0',
-          subtotal: '0'
+        totalDiscount: 100,
+        received: 0,
+        change: 0
+      }
+    },
+    computed: {
+      totalPrice: function () {
+        let total = 0
+        for (let i = 0; i < this.commodityList.length; i++) {
+          total = total + this.commodityList[i].subtotal
         }
+        total = total * this.totalDiscount / 100
+        return total
       }
     },
     methods: {
-      // TODO: Function "handleChange"
       // 1. [Done]Divided handle changes functions with flags / speared functions for each card.
       // 2. Functions should handle an array to record selected commodities and their amount.
       // 3. Refresh Views.
-      handleChange: function (value, commName, commUnit) {
+      handleChange: function (item) {
         let flag
-        console.log('In handleChange, current value is ' + value)
+        console.log('In handleChange, current value is ' + item.num)
         // Refreshing commodity list.
         // Verify whether exists or not.
         if (this.commodityList.length === 0) {
@@ -177,18 +196,18 @@
           // Adding object to list array.
           console.log('Pushing new object to the list.')
           this.commodityList.push({
-            name: commName,
-            amount: value,
-            unit: commUnit,
-            subtotal: value * commUnit
+            name: item.name,
+            amount: item.num,
+            unit: item.price,
+            subtotal: item.num * item.price
           })
         } else {
           console.log('Commodity list is not empty.')
           for (let i = 0; i < this.commodityList.length; i++) {
             let listItem = this.commodityList[i]
-            if (listItem.name === commName) {
-              listItem.amount = value
-              listItem.subtotal = value * commUnit
+            if (listItem.name === item.name) {
+              listItem.amount = item.num
+              listItem.subtotal = item.num * item.price
               flag = 0
               break
             } else {
@@ -197,12 +216,11 @@
             }
           }
           if (flag === 1) {
-            debugger
             this.commodityList.push({
-              name: commName,
-              amount: value,
-              unit: commUnit,
-              subtotal: value * commUnit
+              name: item.name,
+              amount: item.num,
+              unit: item.price,
+              subtotal: item.num * item.price
             })
             flag = 0
           }
@@ -210,24 +228,22 @@
       }
     },
     components: {
+//      ElInputNumber,
+      ElInput,
       ElCard,
       ElButton,
       ElTabPane,
       ElCol,
-      ElRow,
-      'amount-input': {
-        extends: ElInputNumber,
-        props: {
-          commName: {
-            type: String,
-            default: 'Commodity Name'
-          },
-          commUnit: {
-            type: Number,
-            default: '0'
-          }
-        }
-      }
+      ElRow
+//      'amount-input': {
+//        extends: ElInputNumber,
+//        props: {
+//          commName: {
+//            type: String,
+//            default: 'Commodity Name'
+//          }
+//        }
+//      }
     }
   }
 </script>
