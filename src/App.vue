@@ -28,7 +28,7 @@
                   <strong style="line-height: 36px;">{{item.name}}</strong>
                   <!--Cannot use props from child component ElInput.-->
                   <amount-input :comm-name="item.name" :comm-unit="item.price" v-bind:min="0" v-bind:max="item.amount"
-                                v-model="item.num1" v-on:change="handleChange(item.num1, item.name, item.price)"></amount-input>
+                                v-model="item.num" v-on:change="handleChange(item.num, item.name, item.price)"></amount-input>
                 </div>
                 <el-row>
                   <el-col :span="12">
@@ -153,7 +153,6 @@
     // TODO: Binding amount input with this array, compute remaining values automatically.
     data () {
       return {
-        num1: 0,
         commodityList: [],
         selectedCommodity: {
           name: 'Commodity Name',
@@ -165,18 +164,49 @@
     },
     methods: {
       // TODO: Function "handleChange"
-      // 1. Divided handle changes functions with flags / speared functions for each card.
+      // 1. [Done]Divided handle changes functions with flags / speared functions for each card.
       // 2. Functions should handle an array to record selected commodities and their amount.
       // 3. Refresh Views.
       handleChange: function (value, commName, commUnit) {
+        let flag
         console.log('In handleChange, current value is ' + value)
-        // Adding object to list array.
-        this.commodityList.push({
-          name: commName,
-          amount: value,
-          unit: commUnit,
-          subtotal: value * commUnit
-        })
+        // Refreshing commodity list.
+        // Verify whether exists or not.
+        if (this.commodityList.length === 0) {
+          console.log('Commodity list is empty.')
+          // Adding object to list array.
+          console.log('Pushing new object to the list.')
+          this.commodityList.push({
+            name: commName,
+            amount: value,
+            unit: commUnit,
+            subtotal: value * commUnit
+          })
+        } else {
+          console.log('Commodity list is not empty.')
+          for (let i = 0; i < this.commodityList.length; i++) {
+            let listItem = this.commodityList[i]
+            if (listItem.name === commName) {
+              listItem.amount = value
+              listItem.subtotal = value * commUnit
+              flag = 0
+              break
+            } else {
+              flag = 1
+              continue
+            }
+          }
+          if (flag === 1) {
+            debugger
+            this.commodityList.push({
+              name: commName,
+              amount: value,
+              unit: commUnit,
+              subtotal: value * commUnit
+            })
+            flag = 0
+          }
+        }
       }
     },
     components: {
