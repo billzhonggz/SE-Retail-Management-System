@@ -20,7 +20,6 @@
       <el-col v-bind:span="12">
         <el-row>
           <el-tabs type="border-card" v-model="cateIndex">
-            <!--TODO: Fix category selection by modifying database.-->
             <el-tab-pane v-for="category in categories" :key="category.id" :label="category.title">
               <el-card class="box-card" v-for="item in category.commodity" :key="item.id">
                 <div slot="header" class="clearfix">
