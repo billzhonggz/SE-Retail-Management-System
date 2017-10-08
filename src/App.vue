@@ -255,6 +255,7 @@
       // 3. Refresh Views.
       handleChange: function (item) {
         let flag
+        debugger
         console.log('In handleChange, current value is ' + item.num)
         // Refreshing commodity list.
         // Verify whether exists or not.
