@@ -1,0 +1,58 @@
+{
+  "categories": [
+    {
+      "title": "fruit",
+      "commodity": [
+        {
+          "amount": 100,
+          "name": "apple",
+          "price": 3,
+          "state": "new",
+          "unit": "500g"
+        },
+        {
+          "amount": 100,
+          "name": "pear",
+          "price": 2.45,
+          "state": "new",
+          "unit": "500g"
+        }
+      ]
+    },
+    {
+      "title": "food",
+      "commodity": [
+        {
+          "amount": 100,
+          "name": "chicken",
+          "price": 19.98,
+          "state": "new",
+          "unit": "pcs"
+        },
+        {
+          "amount": 100,
+          "name": "bread",
+          "price": 3.54,
+          "state": "new",
+          "unit": "pcs"
+        }
+      ]
+    }
+  ],
+  "orders": [
+    {
+      "change": 40,
+      "commodities": [
+        {
+          "name": "apple",
+          "sold_amount": 20,
+          "sold_price": 3,
+          "unit": "500g"
+        }
+      ],
+      "discount": 100,
+      "received": 100,
+      "total": 60
+    }
+  ]
+}

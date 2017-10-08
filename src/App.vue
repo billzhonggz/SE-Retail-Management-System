@@ -19,9 +19,10 @@
       <!--<el-row>-->
       <el-col v-bind:span="12">
         <el-row>
-          <el-tabs type="border-card">
-            <el-tab-pane v-for="item in categories" :key="item.id" :label="item.title">
-              <el-card class="box-card" v-for="item in commodities" :key="item.id">
+          <el-tabs type="border-card" v-model="cateIndex">
+            <!--TODO: Fix category selection by modifying database.-->
+            <el-tab-pane v-for="category in categories" :key="category.id" :label="category.title">
+              <el-card class="box-card" v-for="item in category.commodity" :key="item.id">
                 <div slot="header" class="clearfix">
                   <!--Card name-->
                   <el-row>
@@ -62,7 +63,6 @@
         </el-row>
       </el-col>
       <el-col v-bind:span="12">
-        <!--TODO: List of transaction-->
         <el-row>
           <el-tabs type="border-card">
             <el-tab-pane label="CURRENT ORDER">
@@ -205,20 +205,30 @@
 
   let app = firebase.initializeApp(config)
   let db = app.database()
-  let dbRef = db.ref('categories')
-  let dbCom = db.ref('commodities/cg1')
-  let dbOrd = db.ref('orders')
+  let dbRef = {
+    source: db.ref('categories')
+    // asObject: true
+  }
+//  let dbCom = {
+//    source: db.ref('commodities'),
+//    asObject: true
+//  }
+  let dbOrd = {
+    source: db.ref('orders'),
+    asObject: true
+  }
 
   // var commodityList = []
 
   export default {
     firebase: {
       categories: dbRef,
-      commodities: dbCom,
+//      commodities: dbCom,
       orders: dbOrd
     },
     data () {
       return {
+        cateIndex: '',
         commodityList: [],
         totalDiscount: 100,
         received: 0,
@@ -239,6 +249,7 @@
       }
     },
     methods: {
+      // Function handleChange(item)
       // 1. [Done]Divided handle changes functions with flags / speared functions for each card.
       // 2. Functions should handle an array to record selected commodities and their amount.
       // 3. Refresh Views.
