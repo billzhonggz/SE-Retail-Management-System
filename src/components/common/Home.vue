@@ -5,7 +5,7 @@
       <!--Top header nav bar-->
       <el-row>
         <el-col>
-          <el-menu defaultActive="3" class="el-menu-demo" mode="horizontal">
+          <el-menu defaultActive="1" class="el-menu-demo" mode="horizontal">
             <a href="#"><el-menu-item index="1">SE Retail Management System</el-menu-item></a>
             <a href="#/storage"><el-menu-item index="2">Storage</el-menu-item></a>
             <a href="#/selling"><el-menu-item index="3">Sell</el-menu-item></a>

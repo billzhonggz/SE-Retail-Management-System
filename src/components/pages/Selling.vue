@@ -39,7 +39,7 @@
                     </div>
                   </el-col>
                   <el-col :span="12">
-                    <img style="max-width: 100%; height: auto; float: right;" src="../pic/apple.jpg" class="image">
+                    <img style="max-width: 100%; height: auto; float: right;" src="../../pic/apple.jpg" class="image">
                   </el-col>
                 </el-row>
               </el-card>
@@ -165,11 +165,11 @@
 
   import ElRow from "element-ui/packages/row/src/row";
   import ElCol from "element-ui/packages/col/src/col";
-  import ElTabPane from "../../node_modules/element-ui/packages/tabs/src/tab-pane";
+  import ElTabPane from "../../../node_modules/element-ui/packages/tabs/src/tab-pane";
   //  import ElInputNumber from '../node_modules/element-ui/packages/input-number'
-  import ElInput from "../../node_modules/element-ui/packages/input/index";
-  import ElButton from "../../node_modules/element-ui/packages/button/src/button";
-  import ElCard from "../../node_modules/element-ui/packages/card/src/main";
+  import ElInput from "../../../node_modules/element-ui/packages/input/index";
+  import ElButton from "../../../node_modules/element-ui/packages/button/src/button";
+  import ElCard from "../../../node_modules/element-ui/packages/card/src/main";
   import firebase from "firebase";
 
   //  let config = {

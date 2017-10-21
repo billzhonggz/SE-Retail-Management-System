@@ -10,12 +10,16 @@ export default new Router({
       component: resolve => require(['@/components/common/Home.vue'], resolve),
       children: [
         {
+          path: '/',
+          component: resolve => require(['@/components/pages/Intro.vue'], resolve)
+        },
+        {
           path: '/selling',
-          component: resolve => require(['@/components/Selling.vue'], resolve)
+          component: resolve => require(['@/components/pages/Selling.vue'], resolve)
         },
         {
           path: '/storage',
-          component: resolve => require(['@/components/Storage.vue'], resolve)
+          component: resolve => require(['@/components/pages/Storage.vue'], resolve)
         }
       ]
     }
