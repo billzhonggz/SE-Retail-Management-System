@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!--Body Part-->
-      <!--<el-row>-->
+    <!--<el-row>-->
     <main>
       <el-col v-bind:span="12" :offset="6">
         <el-row>
@@ -9,24 +9,21 @@
             <el-tab-pane v-for="category in categories" :key="category.id" :label="category.title">
               <el-card class="box-card">
                 <el-row :span="4" :offset="20">
-                  <el-button type="success">ADD NEW ITEM</el-button>
+                  <el-button type="success" @click="newItemDialogVisible = true">ADD NEW ITEM</el-button>
                 </el-row>
               </el-card>
               <el-card class="box-card" v-for="item in category.commodity" :key="item.id">
                 <div slot="header" class="clearfix">
                   <!--Card name-->
                   <el-row>
-                    <el-col v-bind:span="4">
-                      <strong style="line-height: 36px;">Name</strong>
-                    </el-col>
-                    <el-col v-bind:span="4">
-                      <strong style="line-height: 36px;">{{item.name}}</strong>
+                    <el-col v-bind:span="8">
+                      <strong style="line-height: 36px;">Name: {{item.name}}</strong>
                     </el-col>
                     <el-col v-bind:span="4" :offset="8">
-                      <el-button type="primary">EDIT</el-button>
+                      <el-button type="primary" @click="editDialogVisible = true">EDIT</el-button>
                     </el-col>
                     <el-col v-bind:span="4">
-                      <el-button type="danger">DELETE</el-button>
+                      <el-button type="danger" @click="deleteDialogVisible = true">DELETE</el-button>
                     </el-col>
                   </el-row>
                 </div>
@@ -50,6 +47,59 @@
         </el-row>
       </el-col>
     </main>
+    <!--Add new item dialog-->
+    <el-dialog
+      title="Add New Item"
+      :visible.sync="newItemDialogVisible"
+      size="tiny"
+      :before-close="handleClose">
+      <el-row style="margin: 10px">
+        <el-col :span="6">
+          <strong>Name</strong>
+        </el-col>
+        <el-col :span="18">
+          <el-input></el-input>
+        </el-col>
+      </el-row>
+      <el-row style="margin: 10px">
+        <el-col :span="6">
+          <strong>Unit</strong>
+        </el-col>
+        <el-col :span="18">
+          <el-select v-model="newItemUnit" placeholder="Unit">
+            <el-option
+              v-for="item in unitOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+      <el-row style="margin: 10px">
+        <el-col :span="6">
+          <strong>Unit Price</strong>
+        </el-col>
+        <el-col :span="18">
+          <el-input></el-input>
+        </el-col>
+      </el-row>
+      <el-row style="margin: 10px">
+        <el-col :span="6">
+          <strong>Amount</strong>
+        </el-col>
+        <el-col :span="18">
+          <el-input></el-input>
+        </el-col>
+      </el-row>
+      <el-row style="margin: 10px">
+        <el-col :span="6">
+          <strong>Status</strong>
+        </el-col>
+        <el-col :span="18">
+          <el-input></el-input>
+        </el-col>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
@@ -64,6 +114,9 @@
   import ElButton from "../../../node_modules/element-ui/packages/button/src/button";
   import ElCard from "../../../node_modules/element-ui/packages/card/src/main";
   import firebase from "firebase";
+  import ElDialog from "../../../node_modules/element-ui/packages/dialog/src/component.vue";
+  import ElOption from "../../../node_modules/element-ui/packages/select/src/option.vue";
+  import ElSelect from "../../../node_modules/element-ui/packages/select/src/select.vue";
 
   //  let config = {
   //    apiKey: 'AIzaSyDxF-ZmWZP0qtgeQQli2oPCTn6hw4aovbo',
@@ -100,7 +153,30 @@
       //      commodities: dbCom,
       orders: dbOrd
     },
+    data () {
+      return {
+        newItemDialogVisible: false,
+        unitOptions: [{
+          value: 'pcs',
+          label: 'pcs'
+        }, {
+          value: '500g',
+          label: '500g'
+        }],
+        newItemUnit: '',
+        statusOptions: [{
+          value: 'new',
+          label: 'new'
+        }, {
+          value: 'new',
+          label: 'new'
+        }]
+      }
+    },
     components: {
+      ElSelect,
+      ElOption,
+      ElDialog,
       ElInput,
       ElCard,
       ElButton,
@@ -145,7 +221,7 @@
     background-color: #ffffff;
   }
 
-  main .el-card {
+  main.el-card {
     margin-bottom: 15px;
   }
 
