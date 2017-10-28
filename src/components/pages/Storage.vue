@@ -105,39 +105,8 @@
 
 <script>
   /* eslint-disable quotes,semi */
-
-  import ElRow from "element-ui/packages/row/src/row";
-  import ElCol from "element-ui/packages/col/src/col";
-  import ElTabPane from "../../../node_modules/element-ui/packages/tabs/src/tab-pane";
-  //  import ElInputNumber from '../node_modules/element-ui/packages/input-number'
-  import ElInput from "../../../node_modules/element-ui/packages/input/index";
-  import ElButton from "../../../node_modules/element-ui/packages/button/src/button";
-  import ElCard from "../../../node_modules/element-ui/packages/card/src/main";
-//  import firebase from "firebase";
-  import ElDialog from "../../../node_modules/element-ui/packages/dialog/src/component.vue";
-  // import ElOption from "../../../node_modules/element-ui/packages/select/src/option.vue";
-  // import ElSelect from "../../../node_modules/element-ui/packages/select/src/select.vue";
-
-  //  let config = {
-  //    apiKey: 'AIzaSyDxF-ZmWZP0qtgeQQli2oPCTn6hw4aovbo',
-  //    authDomain: 'se-retail.firebaseapp.com',
-  //    databaseURL: 'https://se-retail.firebaseio.com',
-  //    projectId: 'se-retail',
-  //    storageBucket: 'se-retail.appspot.com',
-  //    messagingSenderId: '193615524398'
-  //  }
-
-  // let config = {
-  //   apiKey: "AIzaSyBhr-1yhcgKdqiyYwPRWJ2DatlzxzonHhs",
-  //   authDomain: "se-retail-management.firebaseapp.com",
-  //   databaseURL: "https://se-retail-management.firebaseio.com",
-  //   projectId: "se-retail-management",
-  //   storageBucket: "se-retail-management.appspot.com",
-  //   messagingSenderId: "729149844491"
-  // };
-
-  // let app = firebase.initializeApp(config);
   import db from '../common/Firebase'
+
   let dbRef = {
     source: db.ref("categories")
     // asObject: true
@@ -172,17 +141,6 @@
           label: 'new'
         }]
       }
-    },
-    components: {
-      // ElSelect,
-      // ElOption,
-      ElDialog,
-      ElInput,
-      ElCard,
-      ElButton,
-      ElTabPane,
-      ElCol,
-      ElRow
     }
   }
 </script>
