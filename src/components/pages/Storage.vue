@@ -5,11 +5,12 @@
     <main>
       <el-col v-bind:span="12" :offset="6">
         <el-row>
-          <el-tabs type="border-card" v-model="cateIndex">
-            <el-tab-pane v-for="category in categories" :key="category.id" :label="category.title">
+          <el-tabs type="border-card" v-model="selectedCategory">
+            <el-tab-pane v-for="category in categories" :key="category.id"
+                         :label="category.title">
               <el-card class="box-card">
                 <el-row :span="4" :offset="20">
-                  <el-button type="success" @click="newItemDialogVisible = true">ADD NEW ITEM</el-button>
+                  <el-button type="success" @click="newItemDialogVisible=true">ADD NEW ITEM</el-button>
                 </el-row>
               </el-card>
               <el-card class="box-card" v-for="item in category.commodity" :key="item.id">
@@ -20,10 +21,10 @@
                       <strong style="line-height: 36px;">Name: {{item.name}}</strong>
                     </el-col>
                     <el-col v-bind:span="4" :offset="8">
-                      <el-button type="primary" @click="editDialogVisible = true">EDIT</el-button>
+                      <el-button type="primary" @click="editDialogVisible=true">EDIT</el-button>
                     </el-col>
                     <el-col v-bind:span="4">
-                      <el-button type="danger" @click="deleteDialogVisible = true">DELETE</el-button>
+                      <el-button type="danger" @click="deleteDialogVisible=true">DELETE</el-button>
                     </el-col>
                   </el-row>
                 </div>
@@ -51,8 +52,72 @@
     <el-dialog
       title="Add New Item"
       :visible.sync="newItemDialogVisible"
-      size="tiny"
-      :before-close="handleClose">
+      size="tiny">
+      <el-row style="margin: 10px">
+        <strong>You are adding a new item in {{this.selectedCategory}}</strong>
+      </el-row>
+      <el-row style="margin: 10px">
+        <el-col :span="6">
+          <strong>Name</strong>
+        </el-col>
+        <el-col :span="18">
+          <el-input v-model="newItemName"></el-input>
+        </el-col>
+      </el-row>
+      <el-row style="margin: 10px">
+        <el-col :span="6">
+          <strong>Unit</strong>
+        </el-col>
+        <el-col :span="18">
+          <el-select v-model="newItemUnit" placeholder="Unit">
+            <el-option
+              v-for="item in unitOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+      <el-row style="margin: 10px">
+        <el-col :span="6">
+          <strong>Unit Price</strong>
+        </el-col>
+        <el-col :span="18">
+          <el-input v-model="newItemPrice" v-price="newItemPrice"></el-input>
+        </el-col>
+      </el-row>
+      <el-row style="margin: 10px">
+        <el-col :span="6">
+          <strong>Amount</strong>
+        </el-col>
+        <el-col :span="18">
+          <el-input v-model="newItemAmount"></el-input>
+        </el-col>
+      </el-row>
+      <el-row style="margin: 10px">
+        <el-col :span="6">
+          <strong>Status</strong>
+        </el-col>
+        <el-col :span="18">
+          <el-select v-model="newItemUnit" placeholder="Status">
+            <el-option
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+         <el-button type="success" @click="newItemDialogVisible = false">Confirm</el-button>
+         <el-button type="danger" @click="newItemDialogVisible = false">Cancel</el-button>
+      </span>
+    </el-dialog>
+    <!--Edit item dialog-->
+    <el-dialog
+      title="Edit Item"
+      :visible.sync="editItemDialogVisible"
+      size="tiny">
       <el-row style="margin: 10px">
         <el-col :span="6">
           <strong>Name</strong>
@@ -96,9 +161,31 @@
           <strong>Status</strong>
         </el-col>
         <el-col :span="18">
-          <el-input></el-input>
+          <el-select v-model="newItemUnit" placeholder="Status">
+            <el-option
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
         </el-col>
       </el-row>
+      <span slot="footer" class="dialog-footer">
+         <el-button type="success" @click="editItemDialogVisible = false">Confirm</el-button>
+         <el-button type="danger" @click="editItemDialogVisible = false">Cancel</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- Delete Item Confirmation Dialog -->
+    <el-dialog
+      title="Delete Item"
+      :visible.sync="deleteItemDialogVisible"
+      size="tiny">
+      <strong>Are you sure to delete this item? This cannot be undone.</strong>
+      <span slot="footer" class="dialog-footer">
+         <el-button type="success" @click="deleteItemDialogVisible = false">Confirm</el-button>
+         <el-button type="danger" @click="deleteItemDialogVisible = false">Cancel</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -106,6 +193,7 @@
 <script>
   /* eslint-disable quotes,semi */
   import db from '../common/Firebase'
+  import ElRow from "element-ui/packages/row/src/row";
 
   let dbRef = {
     source: db.ref("categories")
@@ -117,6 +205,7 @@
   };
 
   export default {
+    components: {ElRow},
     firebase: {
       categories: dbRef,
       //      commodities: dbCom,
@@ -124,7 +213,13 @@
     },
     data () {
       return {
+        selectedCategory: '',
         newItemDialogVisible: false,
+        editItemDialogVisible: false,
+        deleteItemDialogVisible: false,
+        newItemName: '',
+        newItemPrice: '',
+        newItemAmount: '',
         unitOptions: [{
           value: 'pcs',
           label: 'pcs'
@@ -135,11 +230,42 @@
         newItemUnit: '',
         statusOptions: [{
           value: 'new',
-          label: 'new'
+          label: 'New'
         }, {
-          value: 'new',
-          label: 'new'
-        }]
+          value: 'second-hand',
+          label: 'Second-handed'
+        }],
+        newItemStatus: ''
+      }
+    },
+    methods: {
+      // ADD NEW ITEM
+      // 1. Identify the current selected category. (By v-model binding.)
+      // 2. Read the input from user.
+      // 3. Perform a check.
+      // 4. Write the data into database.
+      // 5. Clear the remaining data.
+      doAddNewItem () {
+      }
+    },
+    directives: {
+      // PRICE DIRECTIVE
+      // Check user input in real-time.
+      price: {
+        params: ['min', 'max'],
+        twoWay: true,
+        update: function (result) {
+//          var min = this.params.min;
+//          var max = this.params.max;
+
+          this.handler = function () {
+            debugger;
+            var value = parseFloat(this.el.value);
+            if (isNaN(value)) {
+              value = 0;
+            }
+          }
+        }
       }
     }
   }
