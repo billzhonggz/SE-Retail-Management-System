@@ -99,7 +99,7 @@
           <strong>Status</strong>
         </el-col>
         <el-col :span="18">
-          <el-select v-model="newItemUnit" placeholder="Status">
+          <el-select v-model="newItemStatus" placeholder="Status">
             <el-option
               v-for="item in statusOptions"
               :key="item.value"
@@ -109,7 +109,7 @@
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
-         <el-button type="success" @click="newItemDialogVisible = false">Confirm</el-button>
+         <el-button type="success" @click="doAddNewItem">Confirm</el-button>
          <el-button type="danger" @click="newItemDialogVisible = false">Cancel</el-button>
       </span>
     </el-dialog>
@@ -131,7 +131,7 @@
           <strong>Unit</strong>
         </el-col>
         <el-col :span="18">
-          <el-select v-model="newItemUnit" placeholder="Unit">
+          <el-select v-model="editItemUnit" placeholder="Unit">
             <el-option
               v-for="item in unitOptions"
               :key="item.value"
@@ -161,7 +161,7 @@
           <strong>Status</strong>
         </el-col>
         <el-col :span="18">
-          <el-select v-model="newItemUnit" placeholder="Status">
+          <el-select v-model="editItemUnit" placeholder="Status">
             <el-option
               v-for="item in statusOptions"
               :key="item.value"
@@ -197,7 +197,6 @@
 
   let dbRef = {
     source: db.ref("categories")
-    // asObject: true
   };
   let dbOrd = {
     source: db.ref("orders"),
@@ -228,6 +227,7 @@
           label: '500g'
         }],
         newItemUnit: '',
+        editItemUnit: '',
         statusOptions: [{
           value: 'new',
           label: 'New'
@@ -246,6 +246,25 @@
       // 4. Write the data into database.
       // 5. Clear the remaining data.
       doAddNewItem () {
+        // TODO: Cheek if input is empty or not.
+        // Get the selected category.
+        let cate = this.$firebaseRefs.categories.child(this.selectedCategory).child('commodity')
+        // Do add new item to db.
+        cate.push({
+          'amount': this.newItemAmount,
+          'name': this.newItemName,
+          'price': this.newItemPrice,
+          'state': this.newItemStatus,
+          'unit': this.newItemUnit
+        })
+        // Clean up variables.
+        this.newItemAmount = ''
+        this.newItemName = ''
+        this.newItemPrice = ''
+        this.newItemStatus = ''
+        this.newItemUnit = ''
+        // Close dialog
+        this.newItemDialogVisible = false
       }
     },
     directives: {
