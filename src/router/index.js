@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
 
 Vue.use(Router)
 
@@ -8,8 +7,21 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
+      component: resolve => require(['@/components/common/Home.vue'], resolve),
+      children: [
+        {
+          path: '/',
+          component: resolve => require(['@/components/pages/Intro.vue'], resolve)
+        },
+        {
+          path: '/selling',
+          component: resolve => require(['@/components/pages/Selling.vue'], resolve)
+        },
+        {
+          path: '/storage',
+          component: resolve => require(['@/components/pages/Storage.vue'], resolve)
+        }
+      ]
     }
   ]
 })
