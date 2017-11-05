@@ -24,7 +24,7 @@
                       <el-button type="primary" @click="openEditDialog(item.name)">EDIT</el-button>
                     </el-col>
                     <el-col v-bind:span="4">
-                      <el-button type="danger" @click="deleteItemDialogVisible=true">DELETE</el-button>
+                      <el-button type="danger" @click="openDeleteDialog(item.name)">DELETE</el-button>
                     </el-col>
                   </el-row>
                 </div>
@@ -119,6 +119,9 @@
       title="Edit Item"
       :visible.sync="editItemDialogVisible"
       size="tiny">
+      <el-row>
+        <strong>You are editing {{ editItemName }}, with key {{ editItemKey }}</strong>
+      </el-row>
       <el-row style="margin: 10px">
         <el-col :span="6">
           <strong>Name</strong>
@@ -182,9 +185,11 @@
       title="Delete Item"
       :visible.sync="deleteItemDialogVisible"
       size="tiny">
-      <strong>Are you sure to delete this item? This cannot be undone.</strong>
+      <strong>Are you sure to delete the following item? This cannot be undone.</strong>
+      <p>Item Name: {{ deleteItemName }}</p>
+      <p>Item Key: {{ deleteItemKey }}</p>
       <span slot="footer" class="dialog-footer">
-         <el-button type="success" @click="deleteItemDialogVisible = false">Confirm</el-button>
+         <el-button type="success" @click="doDelete()">Confirm</el-button>
          <el-button type="danger" @click="deleteItemDialogVisible = false">Cancel</el-button>
       </span>
     </el-dialog>
@@ -241,7 +246,9 @@
         }],
         newItemStatus: '',
         editItemStatus: '',
-        editItemKey: ''
+        editItemKey: '',
+        deleteItemKey: '',
+        deleteItemName: ''
       }
     },
     methods: {
@@ -312,8 +319,39 @@
         // Do database update.
         this.$firebaseRefs.categories.child(this.selectedCategory).child('commodity')
           .child('/' + this.editItemKey).set(item)
+        // Clean up variables.
+        this.editItemKey = ''
+        this.editItemName = ''
+        this.editItemPrice = ''
+        this.editItemAmount = ''
+        this.editItemUnit = ''
+        this.editItemStatus = ''
         // Close window.
         this.editItemDialogVisible = false
+      },
+      // OPEN DELETE DIALOG
+      // Read selected item, find its key and popup the window.
+      openDeleteDialog (itemName) {
+        this.deleteItemName = itemName
+        // Search DB.
+        this.$firebaseRefs.categories.child(this.selectedCategory).child('commodity')
+          .orderByChild("name").equalTo(itemName).once('value', function (snap) {
+          // Assign values to bind variables.
+            let queryResult = snap.val()
+            this.deleteItemKey = Object.keys(queryResult)
+          }.bind(this))
+        // Popup the delete item window.
+        this.deleteItemDialogVisible = true
+      },
+      // DO DELETE
+      doDelete () {
+        // Do database update.
+        this.$firebaseRefs.categories.child(this.selectedCategory + '/commodity/' + this.deleteItemKey + '/').remove()
+        // Cleanup variables
+        this.deleteItemName = ''
+        this.deleteItemKey = ''
+        // Close the window.
+        this.deleteItemDialogVisible = false
       }
     },
     directives: {
