@@ -172,7 +172,7 @@
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
-         <el-button type="success" @click="editItemDialogVisible = false">Confirm</el-button>
+         <el-button type="success" @click="saveEdit()">Save</el-button>
          <el-button type="danger" @click="editItemDialogVisible = false">Cancel</el-button>
       </span>
     </el-dialog>
@@ -240,7 +240,8 @@
           label: 'Second-handed'
         }],
         newItemStatus: '',
-        editItemStatus: ''
+        editItemStatus: '',
+        editItemKey: ''
       }
     },
     methods: {
@@ -252,6 +253,7 @@
       // 5. Clear the remaining data.
       doAddNewItem () {
         // TODO: Cheek if input is empty or not.
+        // TODO: Forbid adding if there is a item have same name.
         // Get the selected category.
         let cate = this.$firebaseRefs.categories.child(this.selectedCategory).child('commodity')
         // Do add new item to db.
@@ -284,6 +286,7 @@
             let queryResult = snap.val()
             let selectedItem = queryResult[Object.keys(queryResult)]
             console.log(selectedItem)
+            this.editItemKey = Object.keys(queryResult)
             this.editItemName = selectedItem["name"]
             this.editItemPrice = selectedItem["price"]
             this.editItemAmount = selectedItem["amount"]
@@ -292,6 +295,25 @@
           }.bind(this)) // Binding "this" to allow callback function access outer variables.
         // Popup the window.
         this.editItemDialogVisible = true
+      },
+      // SAVE EDIT
+      // 1. Read all edited items in the variables.
+      // 2. Update database according to the key.
+      saveEdit () {
+        // Set up the item to add.
+        let item = {
+          'amount': this.editItemAmount,
+          'name': this.editItemName,
+          'price': this.editItemPrice,
+          'state': this.editItemStatus,
+          'unit': this.editItemUnit
+        }
+        delete item['.key']
+        // Do database update.
+        this.$firebaseRefs.categories.child(this.selectedCategory).child('commodity')
+          .child('/' + this.editItemKey).set(item)
+        // Close window.
+        this.editItemDialogVisible = false
       }
     },
     directives: {
