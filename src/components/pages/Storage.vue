@@ -365,7 +365,6 @@
 //          var max = this.params.max;
 
           this.handler = function () {
-            debugger;
             var value = parseFloat(this.el.value);
             if (isNaN(value)) {
               value = 0;

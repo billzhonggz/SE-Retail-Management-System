@@ -208,7 +208,6 @@
       // 3. Refresh Views.
       handleChange: function (item) {
         let flag;
-        debugger;
         console.log("In handleChange, current value is " + item.num);
         // Refreshing commodity list.
         // Verify whether exists or not.
@@ -250,7 +249,6 @@
       // TODO: Function is not working on the view side.
       clearAll: function () {
         // Clear commodityList
-        debugger;
         this.commodityList.length = 0;
       },
       handleClose: function () {
