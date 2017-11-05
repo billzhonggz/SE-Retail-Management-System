@@ -1,8 +1,34 @@
-# sellpage
+# SE Retail Management System
 
 [![Build Status](https://travis-ci.org/billzhonggz/SE-Retail-Management-System.svg?branch=master)](https://travis-ci.org/billzhonggz/SE-Retail-Management-System)
 
-> A Vue.js project
+> A Final Year Project of Computer Science and Technology Program, BNU-HKBU United International College.
+>
+> Proudly powered by Vue.js & Google Firebase & Element UI
+
+## Introduction
+
+A system for retail management for Social Enterprises in UIC.
+
+Product of a case study on Agile project management methods.
+
+Started from April, 2017. **Still in progress.**
+
+## TODOs
+
+- [x] Establishing database on Firebase.
+- [x] Front-end development for Selling page.
+- [ ] Back-end implementation for Selling page.
+- [x] Establishing vue-router.
+- [x] Front-end development for Storage Management page.
+- [x] Back-end implementation for Storage Management page.
+- [ ] Instance verification for all input fields.
+- [ ] User authentications.
+- [ ] Switch from Firebase to services inside China.
+- [ ] Switch to Element FE 2.x
+- [ ] API for mobile apps.
+- [ ] API for WeChat public accounts / micro program (小程序)
+- [ ] To be continued...
 
 ## Build Setup
 
