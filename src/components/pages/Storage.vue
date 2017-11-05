@@ -21,10 +21,10 @@
                       <strong style="line-height: 36px;">Name: {{item.name}}</strong>
                     </el-col>
                     <el-col v-bind:span="4" :offset="8">
-                      <el-button type="primary" @click="editDialogVisible=true">EDIT</el-button>
+                      <el-button type="primary" @click="openEditDialog(item.name)">EDIT</el-button>
                     </el-col>
                     <el-col v-bind:span="4">
-                      <el-button type="danger" @click="deleteDialogVisible=true">DELETE</el-button>
+                      <el-button type="danger" @click="deleteItemDialogVisible=true">DELETE</el-button>
                     </el-col>
                   </el-row>
                 </div>
@@ -113,6 +113,7 @@
          <el-button type="danger" @click="newItemDialogVisible = false">Cancel</el-button>
       </span>
     </el-dialog>
+
     <!--Edit item dialog-->
     <el-dialog
       title="Edit Item"
@@ -123,7 +124,7 @@
           <strong>Name</strong>
         </el-col>
         <el-col :span="18">
-          <el-input></el-input>
+          <el-input v-model="editItemName"></el-input>
         </el-col>
       </el-row>
       <el-row style="margin: 10px">
@@ -145,7 +146,7 @@
           <strong>Unit Price</strong>
         </el-col>
         <el-col :span="18">
-          <el-input></el-input>
+          <el-input v-model="editItemPrice"></el-input>
         </el-col>
       </el-row>
       <el-row style="margin: 10px">
@@ -153,7 +154,7 @@
           <strong>Amount</strong>
         </el-col>
         <el-col :span="18">
-          <el-input></el-input>
+          <el-input v-model="editItemAmount"></el-input>
         </el-col>
       </el-row>
       <el-row style="margin: 10px">
@@ -161,7 +162,7 @@
           <strong>Status</strong>
         </el-col>
         <el-col :span="18">
-          <el-select v-model="editItemUnit" placeholder="Status">
+          <el-select v-model="editItemStatus" placeholder="Status">
             <el-option
               v-for="item in statusOptions"
               :key="item.value"
@@ -217,8 +218,11 @@
         editItemDialogVisible: false,
         deleteItemDialogVisible: false,
         newItemName: '',
+        editItemName: '',
         newItemPrice: '',
+        editItemPrice: '',
         newItemAmount: '',
+        editItemAmount: '',
         unitOptions: [{
           value: 'pcs',
           label: 'pcs'
@@ -235,7 +239,8 @@
           value: 'second-hand',
           label: 'Second-handed'
         }],
-        newItemStatus: ''
+        newItemStatus: '',
+        editItemStatus: ''
       }
     },
     methods: {
@@ -265,6 +270,28 @@
         this.newItemUnit = ''
         // Close dialog
         this.newItemDialogVisible = false
+      },
+      // OPEN EDIT DIALOG
+      // 1. Identify which button was clicked.
+      // 2. Load the data of that item to variables.
+      // 3. Display data on the dialog.
+      openEditDialog (itemName) {
+        console.log(itemName)
+        // DB query according to item name.
+        this.$firebaseRefs.categories.child(this.selectedCategory).child('commodity')
+          .orderByChild("name").equalTo(itemName).once('value', function (snap) {
+            // Assign values to bind variables.
+            let queryResult = snap.val()
+            let selectedItem = queryResult[Object.keys(queryResult)]
+            console.log(selectedItem)
+            this.editItemName = selectedItem["name"]
+            this.editItemPrice = selectedItem["price"]
+            this.editItemAmount = selectedItem["amount"]
+            this.editItemUnit = selectedItem["unit"]
+            this.editItemStatus = selectedItem["state"]
+          }.bind(this)) // Binding "this" to allow callback function access outer variables.
+        // Popup the window.
+        this.editItemDialogVisible = true
       }
     },
     directives: {
