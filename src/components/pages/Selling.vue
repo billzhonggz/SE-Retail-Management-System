@@ -22,10 +22,12 @@
                     <el-col v-bind:span="4">
                       <strong style="line-height: 36px;">Amount</strong>
                     </el-col>
-                    <el-col v-bind:span="20">
-                      <el-input :comm-name="item.name" :comm-unit="item.price" v-bind:min="0" v-bind:max="item.amount"
-                                v-model="item.num" v-on:change="handleChange(item)"></el-input>
+                    <el-col v-bind:span="12">
+                      <el-input placeholder="0" :comm-name="item.name" :comm-unit="item.price" v-bind:min="0"
+                                v-bind:max="item.amount" v-model="item.num" v-on:change="handleChange(item)"></el-input>
                     </el-col>
+                    <el-button round v-bind:span="4" v-bind:value="0" v-model="item.num" @click="handleIncrease(item)">+</el-button>
+                    <el-button round v-bind:span="4" v-model="item.num" @click="handleDecrease(item)">-</el-button>
                   </el-row>
                 </div>
                 <el-row>
@@ -146,13 +148,41 @@
                 </el-col>
               </el-row>
               <span slot="footer" class="dialog-footer">
-                <el-button type="success" @click="checkoutDialogVisible = false">Confirm</el-button>
+                <el-button type="success" v-on:click="conFirm"
+                           @click="checkoutDialogVisible = false">Confirm</el-button>
                 <el-button type="danger" @click="checkoutDialogVisible = false">Cancel</el-button>
               </span>
             </el-dialog>
-            <el-button type="danger" v-on:click="clearAll()">Clear</el-button>
+            <el-button type="danger" v-on:click="winReload">Clear</el-button>
           </el-card>
         </el-row>
+        <el-tabs type="border-card">
+          <el-tab-pane label="Transaction Record">
+            <!--Selected commodities list-->
+            <el-table v-bind:data="commodityList" height="250" style="width: 100%;">
+              <el-table-column
+                prop="name"
+                label="Transaction Goods">
+              </el-table-column>
+              <el-table-column
+                prop="amount"
+                label="Discount">
+              </el-table-column>
+              <el-table-column
+                prop="unit"
+                label="Total">
+              </el-table-column>
+              <el-table-column
+                prop="subtotal"
+                label="Receive">
+              </el-table-column>
+              <el-table-column
+                prop="subtotal"
+                label="Change">
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+        </el-tabs>
       </el-col>
       <!--</el-row>-->
     </main>
@@ -163,7 +193,6 @@
 <script>
   /* eslint-disable quotes,semi */
   import db from '../common/Firebase'
-
   let dbRef = {
     source: db.ref("categories")
     // asObject: true
@@ -246,16 +275,150 @@
           }
         }
       },
+      handleIncrease: function (item) {
+        let flag;
+        debugger;
+        if (item.num === '') {
+          item.num = 0;
+        }
+        let x = Number(item.num) + 1;
+        debugger;
+        console.log("In handleChange, current value is " + item.num);
+        // Refreshing commodity list.
+        // Verify whether exists or not.
+        if (this.commodityList.length === 0) {
+          console.log("Commodity list is empty.");
+          // Adding object to list array.
+          console.log("Pushing new object to the list.");
+          item.num = x;
+          this.commodityList.push({
+            name: item.name,
+            amount: item.num,
+            unit: item.price,
+            subtotal: item.num * item.price
+          },
+          );
+        } else {
+          console.log("Commodity list is not empty.");
+          for (let i = 0; i < this.commodityList.length; i++) {
+            let listItem = this.commodityList[i];
+            item.num = x;
+            if (listItem.name === item.name) {
+              listItem.amount = item.num;
+              listItem.subtotal = item.num * item.price;
+              flag = 0;
+              x += 1;
+              break;
+            } else {
+              flag = 1;
+              continue;
+            }
+          }
+          if (flag === 1) {
+            this.commodityList.push({
+              name: item.name,
+              amount: item.num,
+              unit: item.price,
+              subtotal: item.num * item.price
+            });
+            flag = 0;
+          }
+        }
+      },
+      handleDecrease: function (item) {
+        let flag;
+        debugger;
+        let x = Number(item.num) - 1;
+        debugger;
+        console.log("In handleChange, current value is " + item.num);
+        // Refreshing commodity list.
+        // Verify whether exists or not.
+        if (this.commodityList.length === 0) {
+          console.log("Commodity list is empty.");
+          // Adding object to list array.
+          console.log("Pushing new object to the list.");
+          item.num = x;
+          this.commodityList.push({
+            name: item.name,
+            amount: item.num,
+            unit: item.price,
+            subtotal: item.num * item.price
+          },
+          );
+        } else {
+          console.log("Commodity list is not empty.");
+          for (let i = 0; i < this.commodityList.length; i++) {
+            let listItem = this.commodityList[i];
+            item.num = x;
+            if (listItem.name === item.name) {
+              listItem.amount = item.num;
+              listItem.subtotal = item.num * item.price;
+              flag = 0;
+              x += 1;
+              break;
+            } else {
+              flag = 1;
+              continue;
+            }
+          }
+          if (flag === 1) {
+            this.commodityList.push({
+              name: item.name,
+              amount: item.num,
+              unit: item.price,
+              subtotal: item.num * item.price
+            });
+            flag = 0;
+          }
+        }
+      },
       // TODO: Function is not working on the view side.
-      clearAll: function () {
-        // Clear commodityList
-        this.commodityList.length = 0;
+      winReload: function (cond) {
+        window.location.reload()
+      },
+      conFirm: function (item) {
+//        let flag;
+//        for (let i = 0; i < this.commodityList.length; i++) {
+//          let listItem = this.commodityList[i];
+//          let cate = this.$firebaseRefs.categories.child('commodity')
+//          cate.push({
+//            'amount': item.amount - listItem.amount
+//          })
+//          if (listItem.name === item.name) {
+//            listItem.amount = item.num;
+//            listItem.subtotal = item.num * item.price;
+//            flag = 0;
+//            break;
+//          } else {
+//            flag = 1;
+//            continue;
+//          }
+//          this.updatefirebase = function (listItem.name, listItem.amount) {
+//            var postData = {
+//              name: this.listItem.name,
+//              amount: this.listItem.amount
+//            };
+//            var newPostKey = firebase.database().ref().child('commodity').push().key;
+//            var updates = {};
+//            updates['/commodity/' + newPostKey] = postData;
+//            return firebase.database().ref().update(updates)
+//          }
+//        }
+//        if (flag === 1) {
+//          this.commodityList.push({
+//            name: item.name,
+//            amount: item.num,
+//            unit: item.price,
+//            subtotal: item.num * item.price
+//          });
+//          flag = 0;
+//        }
       },
       handleClose: function () {
-        this.checkoutDialogVisible = false;
+        this.checkoutDialogVisible = false
       }
     }
-  };
+  }
 </script>
 
 <style>
