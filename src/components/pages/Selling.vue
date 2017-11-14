@@ -159,25 +159,25 @@
         <el-tabs type="border-card">
           <el-tab-pane label="Transaction Record">
             <!--Selected commodities list-->
-            <el-table v-bind:data="commodityList" height="250" style="width: 100%;">
+            <el-table v-bind:data="transactionList" height="250" style="width: 100%;">
               <el-table-column
                 prop="name"
                 label="Transaction Goods">
               </el-table-column>
               <el-table-column
-                prop="amount"
+                prop="discount"
                 label="Discount">
               </el-table-column>
               <el-table-column
-                prop="unit"
+                prop="total"
                 label="Total">
               </el-table-column>
               <el-table-column
-                prop="subtotal"
+                prop="receive"
                 label="Receive">
               </el-table-column>
               <el-table-column
-                prop="subtotal"
+                prop="change"
                 label="Change">
               </el-table-column>
             </el-table>
@@ -211,6 +211,7 @@
     data () {
       return {
         cateIndex: "",
+        transactionList: [],
         commodityList: [],
         totalDiscount: 100,
         received: 0,
@@ -378,6 +379,21 @@
         window.location.reload()
       },
       conFirm: function (item) {
+        for (let i = 0; i < this.commodityList.length; i++) {
+          this.transactionList[i] = this.commodityList[i];
+          if (this.transactionList.name === item.name) {
+            this.transactionList.push({
+              name: this.transactionList.name,
+              discount: this.totalDiscount,
+              total: this.totalPrice,
+              receive: this.received,
+              change: this.changes
+            })
+            break;
+          } else {
+            continue;
+          }
+        }
 //        let flag;
 //        for (let i = 0; i < this.commodityList.length; i++) {
 //          let listItem = this.commodityList[i];
