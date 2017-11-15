@@ -22,12 +22,18 @@
                     <el-col v-bind:span="4">
                       <strong style="line-height: 36px;">Amount</strong>
                     </el-col>
+                    <el-col v-bind:span="4">
+                      <el-button round v-bind:span="4" v-model="item.num" @click="handleDecrease(item)">-</el-button>
+                    </el-col>
                     <el-col v-bind:span="12">
                       <el-input placeholder="0" :comm-name="item.name" :comm-unit="item.price" v-bind:min="0"
                                 v-bind:max="item.amount" v-model="item.num" v-on:change="handleChange(item)"></el-input>
                     </el-col>
-                    <el-button round v-bind:span="4" v-bind:value="0" v-model="item.num" @click="handleIncrease(item)">+</el-button>
-                    <el-button round v-bind:span="4" v-model="item.num" @click="handleDecrease(item)">-</el-button>
+                    <el-col v-bind:span="4">
+                      <el-button round v-bind:span="4" v-bind:value="0" v-model="item.num"
+                                 @click="handleIncrease(item)">+
+                      </el-button>
+                    </el-col>
                   </el-row>
                 </div>
                 <el-row>
@@ -148,8 +154,7 @@
                 </el-col>
               </el-row>
               <span slot="footer" class="dialog-footer">
-                <el-button type="success" v-on:click="conFirm"
-                           @click="checkoutDialogVisible = false">Confirm</el-button>
+                <el-button type="success" @click="handleConfirm()">Confirm</el-button>
                 <el-button type="danger" @click="checkoutDialogVisible = false">Cancel</el-button>
               </span>
             </el-dialog>
@@ -193,6 +198,8 @@
 <script>
   /* eslint-disable quotes,semi */
   import db from '../common/Firebase'
+  import ElCol from "element-ui/packages/col/src/col";
+
   let dbRef = {
     source: db.ref("categories")
     // asObject: true
@@ -203,6 +210,7 @@
   };
 
   export default {
+    components: {ElCol},
     firebase: {
       categories: dbRef,
       //      commodities: dbCom,
@@ -297,8 +305,7 @@
             amount: item.num,
             unit: item.price,
             subtotal: item.num * item.price
-          },
-          );
+          });
         } else {
           console.log("Commodity list is not empty.");
           for (let i = 0; i < this.commodityList.length; i++) {
@@ -344,8 +351,7 @@
             amount: item.num,
             unit: item.price,
             subtotal: item.num * item.price
-          },
-          );
+          });
         } else {
           console.log("Commodity list is not empty.");
           for (let i = 0; i < this.commodityList.length; i++) {
@@ -377,59 +383,31 @@
       winReload: function (cond) {
         window.location.reload()
       },
-      conFirm: function (item) {
-        for (let i = 0; i < this.commodityList.length; i++) {
-          this.transactionList[i] = this.commodityList[i];
-          if (this.transactionList.name === item.name) {
-            this.transactionList.push({
-              name: this.transactionList.name,
-              discount: this.totalDiscount,
-              total: this.totalPrice,
-              receive: this.received,
-              change: this.changes
-            })
-            break;
-          } else {
-            continue;
-          }
+      // HANDLE CONFIRM
+      // 1. Read the selected commodities.
+      // 2. Read other necessary information of an order.
+      // 3. Push the order object to database.
+      // 4. Close the window.
+      handleConfirm: function () {
+        // Give reminder.
+        if (this.received < this.totalPrice) {
+          alert("You haven't received enough money.")
+        } else {
+          // Initialize the order object.
+          let newOrder = this.$firebaseRefs.orders
+          newOrder.push({
+            'time': Date(),
+            'change': this.changes,
+            'discount': this.totalDiscount,
+            'received': this.received,
+            'total': this.totalPrice,
+            'commodities': this.commodityList
+          })
+          // Close the window.
+          this.checkoutDialogVisible = false
         }
-//        let flag;
-//        for (let i = 0; i < this.commodityList.length; i++) {
-//          let listItem = this.commodityList[i];
-//          let cate = this.$firebaseRefs.categories.child('commodity')
-//          cate.push({
-//            'amount': item.amount - listItem.amount
-//          })
-//          if (listItem.name === item.name) {
-//            listItem.amount = item.num;
-//            listItem.subtotal = item.num * item.price;
-//            flag = 0;
-//            break;
-//          } else {
-//            flag = 1;
-//            continue;
-//          }
-//          this.updatefirebase = function (listItem.name, listItem.amount) {
-//            var postData = {
-//              name: this.listItem.name,
-//              amount: this.listItem.amount
-//            };
-//            var newPostKey = firebase.database().ref().child('commodity').push().key;
-//            var updates = {};
-//            updates['/commodity/' + newPostKey] = postData;
-//            return firebase.database().ref().update(updates)
-//          }
-//        }
-//        if (flag === 1) {
-//          this.commodityList.push({
-//            name: item.name,
-//            amount: item.num,
-//            unit: item.price,
-//            subtotal: item.num * item.price
-//          });
-//          flag = 0;
-//        }
       },
+
       handleClose: function () {
         this.checkoutDialogVisible = false
       }
