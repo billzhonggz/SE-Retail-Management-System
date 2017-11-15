@@ -21,10 +21,10 @@
                       <strong style="line-height: 36px;">Name: {{item.name}}</strong>
                     </el-col>
                     <el-col v-bind:span="4" :offset="8">
-                      <el-button type="primary" @click="editDialogVisible=true">EDIT</el-button>
+                      <el-button type="primary" @click="openEditDialog(item.name)">EDIT</el-button>
                     </el-col>
                     <el-col v-bind:span="4">
-                      <el-button type="danger" @click="deleteDialogVisible=true">DELETE</el-button>
+                      <el-button type="danger" @click="openDeleteDialog(item.name)">DELETE</el-button>
                     </el-col>
                   </el-row>
                 </div>
@@ -113,17 +113,21 @@
          <el-button type="danger" @click="newItemDialogVisible = false">Cancel</el-button>
       </span>
     </el-dialog>
+
     <!--Edit item dialog-->
     <el-dialog
       title="Edit Item"
       :visible.sync="editItemDialogVisible"
       size="tiny">
+      <el-row>
+        <strong>You are editing {{ editItemName }}, with key {{ editItemKey }}</strong>
+      </el-row>
       <el-row style="margin: 10px">
         <el-col :span="6">
           <strong>Name</strong>
         </el-col>
         <el-col :span="18">
-          <el-input></el-input>
+          <el-input v-model="editItemName"></el-input>
         </el-col>
       </el-row>
       <el-row style="margin: 10px">
@@ -145,7 +149,7 @@
           <strong>Unit Price</strong>
         </el-col>
         <el-col :span="18">
-          <el-input></el-input>
+          <el-input v-model="editItemPrice"></el-input>
         </el-col>
       </el-row>
       <el-row style="margin: 10px">
@@ -153,7 +157,7 @@
           <strong>Amount</strong>
         </el-col>
         <el-col :span="18">
-          <el-input></el-input>
+          <el-input v-model="editItemAmount"></el-input>
         </el-col>
       </el-row>
       <el-row style="margin: 10px">
@@ -161,7 +165,7 @@
           <strong>Status</strong>
         </el-col>
         <el-col :span="18">
-          <el-select v-model="editItemUnit" placeholder="Status">
+          <el-select v-model="editItemStatus" placeholder="Status">
             <el-option
               v-for="item in statusOptions"
               :key="item.value"
@@ -171,7 +175,7 @@
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
-         <el-button type="success" @click="editItemDialogVisible = false">Confirm</el-button>
+         <el-button type="success" @click="saveEdit()">Save</el-button>
          <el-button type="danger" @click="editItemDialogVisible = false">Cancel</el-button>
       </span>
     </el-dialog>
@@ -181,9 +185,11 @@
       title="Delete Item"
       :visible.sync="deleteItemDialogVisible"
       size="tiny">
-      <strong>Are you sure to delete this item? This cannot be undone.</strong>
+      <strong>Are you sure to delete the following item? This cannot be undone.</strong>
+      <p>Item Name: {{ deleteItemName }}</p>
+      <p>Item Key: {{ deleteItemKey }}</p>
       <span slot="footer" class="dialog-footer">
-         <el-button type="success" @click="deleteItemDialogVisible = false">Confirm</el-button>
+         <el-button type="success" @click="doDelete()">Confirm</el-button>
          <el-button type="danger" @click="deleteItemDialogVisible = false">Cancel</el-button>
       </span>
     </el-dialog>
@@ -217,8 +223,11 @@
         editItemDialogVisible: false,
         deleteItemDialogVisible: false,
         newItemName: '',
+        editItemName: '',
         newItemPrice: '',
+        editItemPrice: '',
         newItemAmount: '',
+        editItemAmount: '',
         unitOptions: [{
           value: 'pcs',
           label: 'pcs'
@@ -235,7 +244,11 @@
           value: 'second-hand',
           label: 'Second-handed'
         }],
-        newItemStatus: ''
+        newItemStatus: '',
+        editItemStatus: '',
+        editItemKey: '',
+        deleteItemKey: '',
+        deleteItemName: ''
       }
     },
     methods: {
@@ -247,6 +260,7 @@
       // 5. Clear the remaining data.
       doAddNewItem () {
         // TODO: Cheek if input is empty or not.
+        // TODO: Forbid adding if there is a item have same name.
         // Get the selected category.
         let cate = this.$firebaseRefs.categories.child(this.selectedCategory).child('commodity')
         // Do add new item to db.
@@ -265,6 +279,79 @@
         this.newItemUnit = ''
         // Close dialog
         this.newItemDialogVisible = false
+      },
+      // OPEN EDIT DIALOG
+      // 1. Identify which button was clicked.
+      // 2. Load the data of that item to variables.
+      // 3. Display data on the dialog.
+      openEditDialog (itemName) {
+        console.log(itemName)
+        // DB query according to item name.
+        this.$firebaseRefs.categories.child(this.selectedCategory).child('commodity')
+          .orderByChild("name").equalTo(itemName).once('value', function (snap) {
+            // Assign values to bind variables.
+            let queryResult = snap.val()
+            let selectedItem = queryResult[Object.keys(queryResult)]
+            console.log(selectedItem)
+            this.editItemKey = Object.keys(queryResult)
+            this.editItemName = selectedItem["name"]
+            this.editItemPrice = selectedItem["price"]
+            this.editItemAmount = selectedItem["amount"]
+            this.editItemUnit = selectedItem["unit"]
+            this.editItemStatus = selectedItem["state"]
+          }.bind(this)) // Binding "this" to allow callback function access outer variables.
+        // Popup the window.
+        this.editItemDialogVisible = true
+      },
+      // SAVE EDIT
+      // 1. Read all edited items in the variables.
+      // 2. Update database according to the key.
+      saveEdit () {
+        // Set up the item to add.
+        let item = {
+          'amount': this.editItemAmount,
+          'name': this.editItemName,
+          'price': this.editItemPrice,
+          'state': this.editItemStatus,
+          'unit': this.editItemUnit
+        }
+        delete item['.key']
+        // Do database update.
+        this.$firebaseRefs.categories.child(this.selectedCategory).child('commodity')
+          .child('/' + this.editItemKey).set(item)
+        // Clean up variables.
+        this.editItemKey = ''
+        this.editItemName = ''
+        this.editItemPrice = ''
+        this.editItemAmount = ''
+        this.editItemUnit = ''
+        this.editItemStatus = ''
+        // Close window.
+        this.editItemDialogVisible = false
+      },
+      // OPEN DELETE DIALOG
+      // Read selected item, find its key and popup the window.
+      openDeleteDialog (itemName) {
+        this.deleteItemName = itemName
+        // Search DB.
+        this.$firebaseRefs.categories.child(this.selectedCategory).child('commodity')
+          .orderByChild("name").equalTo(itemName).once('value', function (snap) {
+          // Assign values to bind variables.
+            let queryResult = snap.val()
+            this.deleteItemKey = Object.keys(queryResult)
+          }.bind(this))
+        // Popup the delete item window.
+        this.deleteItemDialogVisible = true
+      },
+      // DO DELETE
+      doDelete () {
+        // Do database update.
+        this.$firebaseRefs.categories.child(this.selectedCategory + '/commodity/' + this.deleteItemKey + '/').remove()
+        // Cleanup variables
+        this.deleteItemName = ''
+        this.deleteItemKey = ''
+        // Close the window.
+        this.deleteItemDialogVisible = false
       }
     },
     directives: {
@@ -278,7 +365,6 @@
 //          var max = this.params.max;
 
           this.handler = function () {
-            debugger;
             var value = parseFloat(this.el.value);
             if (isNaN(value)) {
               value = 0;

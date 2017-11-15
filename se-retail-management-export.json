@@ -1,113 +1,100 @@
 {
-  "amount" : {
-    "undefined" : {
-      "-KyA4EXisrMS-W-nxCCu" : {
-        "isTrusted" : true
+  "categories": [
+    {
+      "commodity": {
+        "0": {
+          "amount": 100,
+          "name": "apple",
+          "price": 3,
+          "state": "new",
+          "unit": "500g"
+        },
+        "1": {
+          "amount": 100,
+          "name": "pear",
+          "price": 2.45,
+          "state": "new",
+          "unit": "500g"
+        },
+        "-KxrRLC1np62WbtsZ0JH": {
+          "amount": "54",
+          "name": "hi",
+          "price": "10",
+          "state": "new",
+          "unit": "500g"
+        },
+        "-KxrTYwVfxH2bluDNcyy": {
+          "amount": "77",
+          "name": "test",
+          "price": "48",
+          "state": "second-hand",
+          "unit": "500g"
+        },
+        "-Kxr_-5SiYqIGe4pHM5W": {
+          "amount": "47",
+          "name": "aaa",
+          "price": "48",
+          "state": "second-hand",
+          "unit": "500g"
+        },
+        "-Ky9aIFYKdv8K1yQuYeR": {
+          "amount": "102",
+          "name": "Google",
+          "price": "123",
+          "state": "new",
+          "unit": "pcs"
+        }
       },
-      "-KyA8jNvbaMz4GtUMAHf" : {
-        "isTrusted" : true
-      }
-    }
-  },
-  "categories" : [ {
-    "commodity" : {
-      "0" : {
-        "amount" : 100,
-        "name" : "apple",
-        "price" : 3,
-        "state" : "new",
-        "unit" : "500g"
-      },
-      "1" : {
-        "amount" : 100,
-        "name" : "pear",
-        "price" : 2.45,
-        "state" : "new",
-        "unit" : "500g"
-      },
-      "-KxrRLC1np62WbtsZ0JH" : {
-        "amount" : "54",
-        "name" : "hi",
-        "price" : "10",
-        "state" : "new",
-        "unit" : "500g"
-      },
-      "-KxrTYwVfxH2bluDNcyy" : {
-        "amount" : "77",
-        "name" : "test",
-        "price" : "48",
-        "state" : "second-hand",
-        "unit" : "500g"
-      },
-      "-Kxr_-5SiYqIGe4pHM5W" : {
-        "amount" : "47",
-        "name" : "aaa",
-        "price" : "48",
-        "state" : "second-hand",
-        "unit" : "500g"
-      },
-      "-Ky9aIFYKdv8K1yQuYeR" : {
-        "amount" : "102",
-        "name" : "Google",
-        "price" : "123",
-        "state" : "new",
-        "unit" : "pcs"
-      }
+      "title": "fruit"
     },
-    "title" : "fruit"
-  }, {
-    "commodity" : {
-      "0" : {
-        "amount" : 100,
-        "name" : "chicken",
-        "price" : 19.98,
-        "state" : "new",
-        "unit" : "pcs"
+    {
+      "commodity": {
+        "0": {
+          "amount": 100,
+          "name": "chicken",
+          "price": 19.98,
+          "state": "new",
+          "unit": "pcs"
+        },
+        "1": {
+          "amount": 100,
+          "name": "bread",
+          "price": 3.54,
+          "state": "new",
+          "unit": "pcs"
+        },
+        "-KxrRXEIbYK3OH5f-1fW": {
+          "amount": "48",
+          "name": "test2",
+          "price": "5",
+          "state": "new",
+          "unit": "pcs"
+        },
+        "-Ky9fUFd5pnpn2-CpDr5": {
+          "amount": "100",
+          "name": "Hamburger",
+          "price": "121",
+          "state": "new",
+          "unit": "500g"
+        }
       },
-      "1" : {
-        "amount" : 100,
-        "name" : "bread",
-        "price" : 3.54,
-        "state" : "new",
-        "unit" : "pcs"
-      },
-      "-KxrRXEIbYK3OH5f-1fW" : {
-        "amount" : "48",
-        "name" : "test2",
-        "price" : "5",
-        "state" : "new",
-        "unit" : "pcs"
-      },
-      "-Ky9fUFd5pnpn2-CpDr5" : {
-        "amount" : "100",
-        "name" : "Hamburger",
-        "price" : "121",
-        "state" : "new",
-        "unit" : "500g"
-      }
-    },
-    "title" : "food"
-  } ],
-  "commodities" : {
-    "undefined" : {
-      "isTrusted" : true
+      "title": "food"
     }
-  },
-  "commodity" : {
-    "undefined" : {
-      "isTrusted" : true
+  ],
+  "orders": [
+    {
+      "change": 40,
+      "commodities": [
+        {
+          "name": "apple",
+          "sold_amount": 20,
+          "sold_price": 3,
+          "unit": "500g"
+        }
+      ],
+      "discount": 100,
+      "received": 100,
+      "total": 60
     }
-  },
-  "orders" : [ {
-    "change" : 40,
-    "commodities" : [ {
-      "name" : "apple",
-      "sold_amount" : 20,
-      "sold_price" : 3,
-      "unit" : "500g"
-    } ],
-    "discount" : 100,
-    "received" : 100,
-    "total" : 60
-  } ]
+  ]
 }
