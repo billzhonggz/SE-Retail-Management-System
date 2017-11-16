@@ -244,6 +244,14 @@
       // 1. [Done]Divided handle changes functions with flags / speared functions for each card.
       // 2. Functions should handle an array to record selected commodities and their amount.
       // 3. Refresh Views.
+      toDecimal: function (x) {
+        var f = parseFloat(x);
+        if (isNaN(f)) {
+          return;
+        }
+        f = Math.round(x * 100) / 100;
+        return f;
+      },
       handleChange: function (item) {
         let flag;
         console.log("In handleChange, current value is " + item.num);
@@ -257,7 +265,7 @@
             name: item.name,
             amount: item.num,
             unit: item.price,
-            subtotal: item.num * item.price
+            subtotal: this.toDecimal(Number(item.num * item.price))
           });
         } else {
           console.log("Commodity list is not empty.");
@@ -265,7 +273,7 @@
             let listItem = this.commodityList[i];
             if (listItem.name === item.name) {
               listItem.amount = item.num;
-              listItem.subtotal = item.num * item.price;
+              listItem.subtotal = this.toDecimal(Number(item.num * item.price))
               flag = 0;
               break;
             } else {
@@ -278,7 +286,7 @@
               name: item.name,
               amount: item.num,
               unit: item.price,
-              subtotal: item.num * item.price
+              subtotal: this.toDecimal(Number(item.num * item.price))
             });
             flag = 0;
           }
@@ -287,10 +295,10 @@
       handleIncrease: function (item) {
         let flag;
         debugger;
-        if (item.num === '') {
-          item.num = 0;
-        }
         let x = Number(item.num) + 1;
+        if (isNaN(x) === true) {
+          x = 1;
+        }
         debugger;
         console.log("In handleChange, current value is " + item.num);
         // Refreshing commodity list.
@@ -299,12 +307,13 @@
           console.log("Commodity list is empty.");
           // Adding object to list array.
           console.log("Pushing new object to the list.");
+          x = 1;
           item.num = x;
           this.commodityList.push({
             name: item.name,
             amount: item.num,
             unit: item.price,
-            subtotal: item.num * item.price
+            subtotal: this.toDecimal(Number(item.num * item.price))
           });
         } else {
           console.log("Commodity list is not empty.");
@@ -313,7 +322,7 @@
             item.num = x;
             if (listItem.name === item.name) {
               listItem.amount = item.num;
-              listItem.subtotal = item.num * item.price;
+              listItem.subtotal = this.toDecimal(Number(item.num * item.price))
               flag = 0;
               x += 1;
               break;
@@ -327,7 +336,7 @@
               name: item.name,
               amount: item.num,
               unit: item.price,
-              subtotal: item.num * item.price
+              subtotal: this.toDecimal(Number(item.num * item.price))
             });
             flag = 0;
           }
@@ -337,6 +346,9 @@
         let flag;
         debugger;
         let x = Number(item.num) - 1;
+        if (isNaN(x) === true) {
+          x = 0;
+        }
         debugger;
         console.log("In handleChange, current value is " + item.num);
         // Refreshing commodity list.
@@ -345,12 +357,13 @@
           console.log("Commodity list is empty.");
           // Adding object to list array.
           console.log("Pushing new object to the list.");
+          x = 0;
           item.num = x;
           this.commodityList.push({
             name: item.name,
             amount: item.num,
             unit: item.price,
-            subtotal: item.num * item.price
+            subtotal: this.toDecimal(Number(item.num * item.price))
           });
         } else {
           console.log("Commodity list is not empty.");
@@ -359,7 +372,7 @@
             item.num = x;
             if (listItem.name === item.name) {
               listItem.amount = item.num;
-              listItem.subtotal = item.num * item.price;
+              listItem.subtotal = this.toDecimal(Number(item.num * item.price))
               flag = 0;
               x += 1;
               break;
@@ -373,7 +386,7 @@
               name: item.name,
               amount: item.num,
               unit: item.price,
-              subtotal: item.num * item.price
+              subtotal: this.toDecimal(Number(item.num * item.price))
             });
             flag = 0;
           }
@@ -407,7 +420,6 @@
           this.checkoutDialogVisible = false
         }
       },
-
       handleClose: function () {
         this.checkoutDialogVisible = false
       }
