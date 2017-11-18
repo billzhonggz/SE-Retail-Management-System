@@ -23,14 +23,16 @@
                       <strong style="line-height: 36px;">Amount</strong>
                     </el-col>
                     <el-col v-bind:span="4">
-                      <el-button round v-bind:span="4" v-model="item.num" @click="handleDecrease(item)">-</el-button>
+                      <el-button round v-bind:span="4" v-model="item.enabled" v-bind:disabled="item.enabled"
+                                 @click="handleDecrease(item)">-
+                      </el-button>
                     </el-col>
                     <el-col v-bind:span="12">
                       <el-input placeholder="0" :comm-name="item.name" :comm-unit="item.price" v-bind:min="0"
                                 v-bind:max="item.amount" v-model="item.num" v-on:change="handleChange(item)"></el-input>
                     </el-col>
                     <el-col v-bind:span="4">
-                      <el-button round v-bind:span="4" v-bind:value="0" v-model="item.num"
+                      <el-button round v-bind:span="4" v-model="item.disabled" v-bind:disabled="item.disabled"
                                  @click="handleIncrease(item)">+
                       </el-button>
                     </el-col>
@@ -294,6 +296,9 @@
           x = 1;
         }
         debugger;
+        if (x > Number(item.amount)) {
+          this.item.disabled = false
+        }
         console.log("In handleChange, current value is " + item.num);
         // Refreshing commodity list.
         // Verify whether exists or not.
@@ -342,6 +347,9 @@
         let x = Number(item.num) - 1;
         if (isNaN(x) === true) {
           x = 0;
+        }
+        if (x < 0) {
+          this.item.enabled = false
         }
         debugger;
         console.log("In handleChange, current value is " + item.num);
