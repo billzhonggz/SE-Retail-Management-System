@@ -23,15 +23,15 @@
     </el-table>
     <!--Pop-up dialog for complete order display.-->
     <el-dialog
-      title="Transcription Detail"
-      :visible.sync="transcriptionDetailDialogVisible"
+      title="Transaction Detail"
+      :visible.sync="transactionDetailDialogVisible"
       size="tiny"
       :before-close="handleDetailDialogClose">
       <el-row>
-        <p>Time: {{transcriptionDetail.time}}</p>
+        <p>Time: {{transactionDetail.time}}</p>
       </el-row>
       <el-row>
-        <el-table v-bind:data="transcriptionDetail.commodities" border style="width: 100%;">
+        <el-table v-bind:data="transactionDetail.commodities" border style="width: 100%;">
           <el-table-column
             prop="name"
             label="Commodity">
@@ -55,13 +55,13 @@
           <p>Discount </p>
         </el-col>
         <el-col v-bind:span="8">
-          <el-input placehoder="100%" v-model="transcriptionDetail.discount" :disabled="true"></el-input>
+          <el-input placehoder="100%" v-model="transactionDetail.discount" :disabled="true"></el-input>
         </el-col>
         <el-col v-bind:span="4">
           <p>Total</p>
         </el-col>
         <el-col v-bind:span="8">
-          <el-input v-model="transcriptionDetail.total" :disabled="true"></el-input>
+          <el-input v-model="transactionDetail.total" :disabled="true"></el-input>
         </el-col>
       </el-row>
       <el-row>
@@ -69,13 +69,13 @@
           <p>Receive </p>
         </el-col>
         <el-col v-bind:span="8">
-          <el-input placehoder="100%" v-model="transcriptionDetail.received" :disabled="true"></el-input>
+          <el-input placehoder="100%" v-model="transactionDetail.received" :disabled="true"></el-input>
         </el-col>
         <el-col v-bind:span="4">
           <p>Change</p>
         </el-col>
         <el-col v-bind:span="8">
-          <el-input v-model="transcriptionDetail.change" :disabled="true"></el-input>
+          <el-input v-model="transactionDetail.change" :disabled="true"></el-input>
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
@@ -136,8 +136,8 @@
     },
     data () {
       return {
-        transcriptionDetail: [],
-        transcriptionDetailDialogVisible: false
+        transactionDetail: [],
+        transactionDetailDialogVisible: false
       }
     },
     computed: {
@@ -178,12 +178,12 @@
       viewDetail (row) {
         console.log(row)
         // Give a dialog to display the detail information.
-        this.transcriptionDetail = row
-        this.transcriptionDetailDialogVisible = true
+        this.transactionDetail = row
+        this.transactionDetailDialogVisible = true
       },
       handleDetailDialogClose () {
-        this.transcriptionDetail = []
-        this.transcriptionDetailDialogVisible = false
+        this.transactionDetail = []
+        this.transactionDetailDialogVisible = false
       }
     }
   }

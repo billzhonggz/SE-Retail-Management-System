@@ -162,7 +162,7 @@
           </el-card>
         </el-row>
         <el-tabs type="border-card">
-          <el-tab-pane label="Transaction Record">
+          <el-tab-pane label="TRANSACTION RECORDS">
               <!--<el-table-column v-for="(column, index) in columns" :key="column.dataIndex" :label="column.text"></el-table-column>-->
             <tree-grid :columns="columns" :tree-structure="true" :dataSource="orders"></tree-grid>
           </el-tab-pane>
@@ -204,10 +204,6 @@
         totalDiscount: 100,
         received: 0,
         checkoutDialogVisible: false,
-        ordersTreeProps: {
-          children: 'commodities',
-          label: 'time'
-        },
         columns: [
           {
             text: 'Time',
@@ -238,10 +234,6 @@
       }
     },
     methods: {
-      // Function handleChange(item)
-      // 1. [Done]Divided handle changes functions with flags / speared functions for each card.
-      // 2. Functions should handle an array to record selected commodities and their amount.
-      // 3. Refresh Views.
       toDecimal: function (x) {
         var f = parseFloat(x);
         if (isNaN(f)) {
@@ -250,6 +242,10 @@
         f = Math.round(x * 100) / 100;
         return f;
       },
+      // Function handleChange(item)
+      // 1. [Done]Divided handle changes functions with flags / speared functions for each card.
+      // 2. Functions should handle an array to record selected commodities and their amount.
+      // 3. Refresh Views.
       handleChange: function (item) {
         let flag;
         console.log("In handleChange, current value is " + item.num);
@@ -389,7 +385,6 @@
           }
         }
       },
-      // TODO: Function is not working on the view side.
       winReload: function (cond) {
         window.location.reload()
       },

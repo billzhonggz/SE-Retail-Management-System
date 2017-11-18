@@ -200,14 +200,9 @@
 
   let dbRef = {
     source: db.ref("categories")
-  };
-  let dbOrd = {
-    source: db.ref("orders"),
-    asObject: true
-  };
+  }
 
   export default {
-    components: {ElRow},
     firebase: {
       categories: dbRef,
       //      commodities: dbCom,
