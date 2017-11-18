@@ -54,9 +54,6 @@
       :visible.sync="newItemDialogVisible"
       size="tiny">
       <el-row style="margin: 10px">
-        <strong>You are adding a new item in {{this.selectedCategory}}</strong>
-      </el-row>
-      <el-row style="margin: 10px">
         <el-col :span="6">
           <strong>Name</strong>
         </el-col>
