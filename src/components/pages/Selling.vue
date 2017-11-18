@@ -393,6 +393,7 @@
         if (this.received < this.totalPrice) {
           alert("You haven't received enough money.")
         } else {
+          // TODO: Update inventory.
           // Initialize the order object.
           let newOrder = this.$firebaseRefs.orders
           newOrder.push({
@@ -407,7 +408,6 @@
           this.checkoutDialogVisible = false
         }
       },
-
       handleClose: function () {
         this.checkoutDialogVisible = false
       }
