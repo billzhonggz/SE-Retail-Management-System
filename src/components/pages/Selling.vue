@@ -409,6 +409,26 @@
           alert("You haven't received enough money.")
         } else {
           // TODO: Update inventory.
+//          let comms = this.$firebaseRefs.categories
+//          // Search the commodity.
+//          let selectComm = {}
+//          for (selectComm in this.commodityList) {
+//            console.log("Current select " + selectComm['name'])
+//            if (comms.child('0/commodity').orderByChild('name').equalTo(selectComm.name) != null) {
+//              // Get key
+//              comms.child('0/commodity').orderByChild('name').equalTo(selectComm.name).once('value', function (snap) {
+//                let key = snap.key
+//                // Update database
+//                let dbData = snap.val()
+//                let update = {}
+//                debugger
+//                console.log(update)
+//                update['0/commodity/' + key + '/amount'] = dbData['amount'] - selectComm['amount']
+//                debugger
+//                console.log(update)
+//              })
+//            }
+//          }
           // Initialize the order object.
           let newOrder = this.$firebaseRefs.orders
           newOrder.push({

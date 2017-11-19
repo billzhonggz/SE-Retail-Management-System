@@ -196,7 +196,6 @@
 <script>
   /* eslint-disable quotes,semi */
   import db from '../common/Firebase'
-  import ElRow from "element-ui/packages/row/src/row";
 
   let dbRef = {
     source: db.ref("categories")
@@ -204,9 +203,7 @@
 
   export default {
     firebase: {
-      categories: dbRef,
-      //      commodities: dbCom,
-      orders: dbOrd
+      categories: dbRef
     },
     data () {
       return {
